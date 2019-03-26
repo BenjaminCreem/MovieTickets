@@ -1,15 +1,24 @@
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 import java.sql.*;
 
 public class AccountManager {
 
-    Connection databaseConn;
-    String databasePath = "jbdc:mysql://localhost:3306/movietickets";
+    private Connection databaseConn;
 
     public AccountManager(){
+        String driverName = "com.mysql.cj.jdbc.Driver";
+        String serverName = "localhost";
+        String myDatabase = "MovieTickets";
+        String url = "jdbc:mysql://" + serverName + "/" + myDatabase;
+        String username = "root";
+        String password = "wit123";
         try {
-            databaseConn = DriverManager.getConnection(databasePath);
+            Class.forName(driverName);
+            databaseConn = DriverManager.getConnection(url, username, password);
         }
-        catch(java.sql.SQLException e){
+        catch(Exception e){
             e.printStackTrace();
         }
     }
@@ -20,8 +29,20 @@ public class AccountManager {
      * @return true if account was created successfully, false if there was an error
      */
     public boolean createEmployeeAccount(String email, String password, String confirmPassword, boolean isManager){
+        //Check password and confirm password match
         if(password.equals(confirmPassword)){
-            return true;
+            try {
+                //Make sure no account already exists with that username
+                Statement stmt = databaseConn.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT * FROM employees WHERE email = '" + email + "'");
+                if(rs == null){
+                    rs = stmt.executeQuery("INSERT INTO employees (email, password, isManager) VALUES (" + email + ", " + password + ", " + isManager + ");");
+                    return true;
+                }
+            }
+            catch(java.sql.SQLException e){
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -33,20 +54,53 @@ public class AccountManager {
      */
     public boolean createCustomerAccount(String email, String password, String confirmPassword, String creditNum, Date expDate, String secCode, String zip){
         if(password.equals(confirmPassword)){
-            return true;
+            try {
+                //Make sure no account already exists with that username
+                Statement stmt = databaseConn.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT email FROM customers WHERE email = '" + email + "'");
+                if(!rs.next())
+                {
+                    stmt.executeUpdate("INSERT INTO customers (email, password, creditNum, creditExpDate, secCode, zipCode) VALUES ('" + email + "', '" + password + "', '" + creditNum + "', '" +
+                            expDate + "', '" + secCode + "', '" + zip + "');");
+                    return true;
+                }
+            }
+            catch(java.sql.SQLException e){
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            System.out.println("Passwords do not match1"); //Debug stuff
         }
         return false;
     }
 
 
     /**
-     * Gets a custmer class from an email address. That customer class will contain
+     * Gets a customer class from an email address. That customer class will contain
      * the customer's saved payment info.
-     * @param email
-     * @return
+     * @param email - email for customer identifier
+     * @return - returns a customer based on the info that the customer provided
      */
     public Customer getPaymentInfo(String email){
         Customer c = new Customer();
+        try {
+            Statement stmt = databaseConn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT email, creditNum, creditExpDate, secCode, zipCode FROM customers WHERE email = '" + email + "'");
+            while(rs.next()){ //Should only be one person returned so this should only go through once
+                c.email = rs.getString(1);
+                c.creditNum = rs.getString(2);
+                c.creditExpDate = rs.getDate(3);
+                c.secCode = rs.getString(4);
+                c.zipCode = rs.getString(5);
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        //Debug
+        System.out.println(c);
         return c;
     }
 
