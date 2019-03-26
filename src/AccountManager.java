@@ -35,14 +35,18 @@ public class AccountManager {
                 //Make sure no account already exists with that username
                 Statement stmt = databaseConn.createStatement();
                 ResultSet rs = stmt.executeQuery("SELECT * FROM employees WHERE email = '" + email + "'");
-                if(rs == null){
-                    rs = stmt.executeQuery("INSERT INTO employees (email, password, isManager) VALUES (" + email + ", " + password + ", " + isManager + ");");
+                if(!rs.next()){
+                    stmt.executeUpdate("INSERT INTO employees (email, password, isManager) VALUES ('" + email + "', '" + password + "', '" + isManager + "');");
                     return true;
                 }
             }
             catch(java.sql.SQLException e){
                 e.printStackTrace();
             }
+        }
+        else
+        {
+            System.out.println("Passwords do not match!"); //Debug stuff
         }
         return false;
     }
@@ -71,7 +75,7 @@ public class AccountManager {
         }
         else
         {
-            System.out.println("Passwords do not match1"); //Debug stuff
+            System.out.println("Passwords do not match!"); //Debug stuff
         }
         return false;
     }
@@ -111,7 +115,17 @@ public class AccountManager {
      * @return - true if username and password match, false otherwise
      */
     public boolean customerSignin(String email, String password){
-        return true;
+        try{
+            Statement stmt = databaseConn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT email, password FROM customers WHERE email = '" + email + "' AND password = '" + password + "'");
+            if(rs.next()){
+                return true;
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return false;
     }
 
     /**
@@ -121,6 +135,16 @@ public class AccountManager {
      * @return - true if username and password match, false otherwise
      */
     public boolean employeeSignin(String email, String password){
-        return true;
+        try{
+            Statement stmt = databaseConn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT email, password FROM employees WHERE email = '" + email + "' AND password = '" + password + "'");
+            if(rs.next()){
+                return true;
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return false;
     }
 }
