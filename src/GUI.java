@@ -32,9 +32,9 @@ public class GUI extends Application{
         window.setTitle("Movie Tickets");
 
         //Set possible next scenes depending on user input
-        SceneSetter sm = new SceneSetter(window);
-        customerScene = sm.getLoginScene();
-        employeeScene = sm.getLoginScene();
+        SceneSetter sm = new SceneSetter(window, thisScene);
+        customerScene = sm.getLoginScene("customer");
+        employeeScene = sm.getLoginScene("employee");
 
         //Info label
         Label info = new Label("Welcome to Movie Tickets1");
@@ -60,6 +60,7 @@ public class GUI extends Application{
 
         thisScene = new Scene(layout, 1280, 720);
         thisScene.getStylesheets().add("styles.css");
+        sm.setPrevScene(thisScene); //Needed for back button
         primaryStage.setScene(thisScene);
         primaryStage.show();
     }

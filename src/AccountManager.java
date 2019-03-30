@@ -13,7 +13,7 @@ public class AccountManager {
         String myDatabase = "MovieTickets";
         String url = "jdbc:mysql://" + serverName + "/" + myDatabase;
         String username = "root";
-        String password = "wit123";
+        String password = "KFZ73bx844FB10xH";
         try {
             Class.forName(driverName);
             databaseConn = DriverManager.getConnection(url, username, password);
@@ -67,6 +67,10 @@ public class AccountManager {
                     stmt.executeUpdate("INSERT INTO customers (email, password, creditNum, creditExpDate, secCode, zipCode) VALUES ('" + email + "', '" + password + "', '" + creditNum + "', '" +
                             expDate + "', '" + secCode + "', '" + zip + "');");
                     return true;
+                }
+                else
+                {
+                    System.out.println("Account already exists!");
                 }
             }
             catch(java.sql.SQLException e){
