@@ -11,7 +11,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.util.HashMap;
 
 public class GUI extends Application{
 
@@ -34,8 +33,8 @@ public class GUI extends Application{
 
         //Set possible next scenes depending on user input
         SceneSetter sm = new SceneSetter(window);
-        customerScene = sm.getCustomerScene();
-        employeeScene = sm.getEmployeeScene();
+        customerScene = sm.getLoginScene();
+        employeeScene = sm.getLoginScene();
 
         //Info label
         Label info = new Label("Welcome to Movie Tickets1");
@@ -64,4 +63,5 @@ public class GUI extends Application{
         primaryStage.setScene(thisScene);
         primaryStage.show();
     }
+
 }
