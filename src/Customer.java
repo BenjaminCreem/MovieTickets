@@ -6,4 +6,9 @@ public class Customer {
     Date creditExpDate;
     String secCode;
     String zipCode;
+
+    public String toString(){
+        return "Email: " + email + ", CreditNum: " + creditNum + ", CreditExpDate: " + creditExpDate + ", Security Code: " + secCode + ", Zip Code: " + zipCode;
+    }
 }
+

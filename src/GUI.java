@@ -1,16 +1,26 @@
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.util.HashMap;
 
-public class GUI extends Application {
+public class GUI extends Application{
 
-    Button cusLogin;
-    Button empLogin;
+    private Stage window;
+    private Scene thisScene;
+    private Scene customerScene;
+    private Scene employeeScene;
+    private Button cusLogin;
+    private Button empLogin;
 
     public static void main(String[] args){
         launch(args);
@@ -18,43 +28,40 @@ public class GUI extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        primaryStage.setTitle("Movie Tickets");
+        //Main Window
+        window = primaryStage;
+        window.setTitle("Movie Tickets");
+
+        //Set possible next scenes depending on user input
+        SceneSetter sm = new SceneSetter();
+        customerScene = sm.getCustomerScene();
+        employeeScene = sm.getEmployeeScene();
+
+        //Info label
+        Label info = new Label("Welcome to Movie Tickets1");
+
+        //Login Buttons
         cusLogin = new Button();
         cusLogin.setText("Customer Login");
-        //empLogin = new Button();
-        //empLogin.setText("Employee Login");
+        cusLogin.getStyleClass().add("button");
+        cusLogin.setId("cusLogin");
+        cusLogin.setOnAction(e -> window.setScene(customerScene)); //Lambda expression
 
-        StackPane layout = new StackPane();
-        layout.getChildren().add(cusLogin);
-        //layout.getChildren().add(empLogin);
 
-        Scene scene = new Scene(layout, 1280, 720);
-        primaryStage.setScene(scene);
+        empLogin = new Button();
+        empLogin.setText("Employee Login");
+        empLogin.getStyleClass().add("button");
+        empLogin.setId("empLogin");
+        empLogin.setOnAction(e -> window.setScene(employeeScene));
+
+
+        VBox layout = new VBox(20);
+        layout.setAlignment(Pos.CENTER);
+        layout.getChildren().addAll(info, empLogin, cusLogin);
+
+        thisScene = new Scene(layout, 1280, 720);
+        thisScene.getStylesheets().add("styles.css");
+        primaryStage.setScene(thisScene);
         primaryStage.show();
-
-        //ScreenController sc = new ScreenController(scene);
-    }
-
-
-
-    private class ScreenController {
-        private HashMap<String, Pane> screenMap = new HashMap<>();
-        private Scene main;
-
-        public ScreenController(Scene main) {
-            this.main = main;
-        }
-
-        protected void addScreen(String name, Pane pane){
-            screenMap.put(name, pane);
-        }
-
-        protected void removeScreen(String name){
-            screenMap.remove(name);
-        }
-
-        protected void activate(String name){
-            main.setRoot( screenMap.get(name) );
-        }
     }
 }
