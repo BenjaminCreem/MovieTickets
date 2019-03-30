@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 
 public class GUI extends Application{
 
-    private Stage window;
+    protected Stage window;
     private Scene thisScene;
     private Scene customerScene;
     private Scene employeeScene;
