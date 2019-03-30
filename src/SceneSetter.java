@@ -1,11 +1,15 @@
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
+import javafx.stage.Window;
+
 
 public class SceneSetter {
 
-    public SceneSetter(){
+    Window window;
 
+    public SceneSetter(Window w){
+        window = w;
     }
 
     public Scene getCustomerScene(){

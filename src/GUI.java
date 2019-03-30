@@ -33,7 +33,7 @@ public class GUI extends Application{
         window.setTitle("Movie Tickets");
 
         //Set possible next scenes depending on user input
-        SceneSetter sm = new SceneSetter();
+        SceneSetter sm = new SceneSetter(window);
         customerScene = sm.getCustomerScene();
         employeeScene = sm.getEmployeeScene();
 
