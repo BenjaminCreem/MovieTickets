@@ -37,7 +37,7 @@ public class GUI extends Application{
         employeeScene = sm.getLoginScene("employee");
 
         //Info label
-        Label info = new Label("Welcome to Movie Tickets1");
+        Label info = new Label("Welcome to Movie Tickets!");
 
         //Login Buttons
         cusLogin = new Button();
@@ -56,7 +56,7 @@ public class GUI extends Application{
 
         VBox layout = new VBox(20);
         layout.setAlignment(Pos.CENTER);
-        layout.getChildren().addAll(info, empLogin, cusLogin);
+        layout.getChildren().addAll(info, cusLogin, empLogin);
 
         thisScene = new Scene(layout, 1280, 720);
         thisScene.getStylesheets().add("styles.css");

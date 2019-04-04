@@ -29,7 +29,7 @@ public class SceneSetter {
         customerOrEmployee = cusOrEmp;
         VBox mainLayout = new VBox();
         mainLayout.setAlignment(Pos.CENTER);
-        mainLayout.setSpacing(-75.0); //Make everything tighter
+        mainLayout.setSpacing(-50.0); //Make everything tighter
 
 
         Label loginLabel = new Label("Login");
@@ -59,7 +59,6 @@ public class SceneSetter {
         //Login Button - Need to set onclick listener to verify from account manager and proceed to next screen
         Button loginButton = new Button("Login");
         loginButton.getStyleClass().add("button");
-        loginButton.setOnAction(e -> loginClicked(emailInputLogin, passInputLogin));
         GridPane.setConstraints(loginButton, 1, 2);
 
         //Add all to grid
@@ -70,6 +69,7 @@ public class SceneSetter {
 
         //Sign up Stuff - ONLY IF USER IS A CUSTOMER
         if(customerOrEmployee.equals("customer")) {
+            loginButton.setOnAction(e -> loginClickedCustomer(emailInputLogin, passInputLogin));
             Label signupLabel = new Label("Sign up");
             mainLayout.getChildren().add(signupLabel);
 
@@ -150,6 +150,10 @@ public class SceneSetter {
             //Add Signup grid to VBox
             mainLayout.getChildren().add(signup);
         }
+        else
+        {
+            loginButton.setOnAction(e -> loginClickedEmployee(emailInputLogin, passInputLogin));
+        }
         //Add back button
         Button backButton = new Button("Back");
         backButton.getStyleClass().add("button");
@@ -162,21 +166,22 @@ public class SceneSetter {
         return scene;
     }
 
-    private void loginClicked(TextField email, TextField password){
+    private void loginClickedCustomer(TextField email, TextField password){
         AccountManager am = new AccountManager();
-        if(customerOrEmployee.equals("customer")){
-            if(am.customerSignin(email.getText(), password.getText())){ //Correct username and password
-                //Go to movie selection screen
-
-            }
-        }
-        else{ //They are an employee trying to log in
-            if(am.employeeSignin(email.getText(), password.getText())){
-                //Go to movie selection screen
-                
-            }
+        if(am.customerSignin(email.getText(), password.getText())){ //Correct username and password
+            //Go to movie selection screen
+            window.setScene(getTheaterScene());
         }
     }
+
+    private void loginClickedEmployee(TextField email, TextField password){
+        AccountManager am = new AccountManager();
+        if(am.employeeSignin(email.getText(), password.getText())){ //Correct username and password
+            //Go to movie selection screen
+            window.setScene(getTheaterScene());
+        }
+    }
+
 
     private void signupClicked(TextField email, PasswordField pass, PasswordField confPass, TextField creditNum,
                                DatePicker dp, TextField secCode, TextField zipCode)
@@ -188,7 +193,7 @@ public class SceneSetter {
         if(am.createCustomerAccount(email.getText(), pass.getText(), confPass.getText(), creditNum.getText(),
                 sqlDate, secCode.getText(), zipCode.getText())){
             //Signup successful, go to movie selection screen
-
+            window.setScene(getTheaterScene());
         }
         else
         {
@@ -202,6 +207,30 @@ public class SceneSetter {
 
 
 
-    //public Scene getTheaterScene(){
-    //}
+    public Scene getTheaterScene(){
+        VBox mainLayout = new VBox();
+        mainLayout.setAlignment(Pos.CENTER);
+        Label loginLabel = new Label("All Movies For Today");
+        mainLayout.getChildren().add(loginLabel);
+
+        GridPane grid = new GridPane();
+        grid.setPadding(new Insets(100, 100, 100 ,100)); //Border to window
+        grid.setVgap(10); //Set vertical spacing
+        grid.setHgap(10); //Set horizontal spacing
+        grid.setAlignment(Pos.CENTER);
+
+        TheaterManager tm = new TheaterManager();
+
+        mainLayout.getChildren().add(grid);
+
+
+
+
+
+
+
+
+        Scene scene = new Scene(mainLayout, 1280, 720);
+        return scene;
+    }
 }

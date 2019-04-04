@@ -121,7 +121,10 @@ public class AccountManager {
     public boolean customerSignin(String email, String password){
         try{
             Statement stmt = databaseConn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT email, password FROM customers WHERE email = '" + email + "' AND password = '" + password + "'");
+            String query = "SELECT * FROM customers WHERE email = '" + email + "' AND password = '" + password + "'";
+            System.out.println(query);
+            ResultSet rs = stmt.executeQuery(query);
+            System.out.println("email: " + email + "\npassword: " + password);
             if(rs.next()){
                 return true;
             }
