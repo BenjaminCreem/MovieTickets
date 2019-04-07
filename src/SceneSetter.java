@@ -6,12 +6,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 
 
 public class SceneSetter {
@@ -219,16 +221,26 @@ public class SceneSetter {
         grid.setHgap(10); //Set horizontal spacing
         grid.setAlignment(Pos.CENTER);
 
+        //Adding all movies to screen
         TheaterManager tm = new TheaterManager();
+        for(int i = 1; i <= 5; i++){ //Loop through all theaters - currently only 5 for simplicity
+            ArrayList<Showing> showings = tm.getShowings(i);
+            //We can use showings.get(0) here because all of the movies in showings will the same
+            //Movie name only changes each loop
+            Label theaterNumLabel = new Label(showings.get(0).movieName + " - Theater Number: " + i);
+            GridPane.setConstraints(theaterNumLabel, 0, i-1);
+
+            System.out.println("Showings Size: " + showings.size());
+            for(int j = 0; j < showings.size(); j++){
+                UtilityMethods um = new UtilityMethods();
+                Hyperlink theaterLink = new Hyperlink(um.formatTime(showings.get(j).showtime));
+                GridPane.setConstraints(theaterLink, j + 1, i-1);
+                grid.getChildren().add(theaterLink);
+            }
+            grid.getChildren().addAll(theaterNumLabel);
+        }
 
         mainLayout.getChildren().add(grid);
-
-
-
-
-
-
-
 
         Scene scene = new Scene(mainLayout, 1280, 720);
         return scene;
