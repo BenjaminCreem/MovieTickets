@@ -1,11 +1,19 @@
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -21,10 +29,17 @@ public class SceneSetter {
     private Stage window;
     private Scene prevScene;
     private String customerOrEmployee;
+    private Scene home;
+
+
+    //Used for screen where user inputs their seats
+    private int numberSeatsSelected;
 
     public SceneSetter(Stage w, Scene oldScene){
         window = w;
         prevScene = oldScene;
+        home = oldScene;
+        numberSeatsSelected = 0;
     }
 
     public Scene getLoginScene(String cusOrEmp){
@@ -230,10 +245,13 @@ public class SceneSetter {
             Label theaterNumLabel = new Label(showings.get(0).movieName + " - Theater Number: " + i);
             GridPane.setConstraints(theaterNumLabel, 0, i-1);
 
-            System.out.println("Showings Size: " + showings.size());
             for(int j = 0; j < showings.size(); j++){
+                final int movieID = j;
                 UtilityMethods um = new UtilityMethods();
-                Hyperlink theaterLink = new Hyperlink(um.formatTime(showings.get(j).showtime));
+                Hyperlink theaterLink = new Hyperlink(um.formatTime(showings.get(movieID).showtime));
+
+                theaterLink.setOnAction(e -> window.setScene(getSeatSelectionScreen(showings.get(movieID).id)));
+
                 GridPane.setConstraints(theaterLink, j + 1, i-1);
                 grid.getChildren().add(theaterLink);
             }
@@ -242,7 +260,214 @@ public class SceneSetter {
 
         mainLayout.getChildren().add(grid);
 
+        Button backButton = new Button("Back");
+        prevScene = window.getScene();
+        backButton.setOnAction(e -> window.setScene(prevScene));
+        mainLayout.getChildren().add(backButton);
+
         Scene scene = new Scene(mainLayout, 1280, 720);
         return scene;
+    }
+
+    public Scene getSeatSelectionScreen(int movieId){
+        VBox mainLayout = new VBox();
+
+        UtilityMethods um = new UtilityMethods();
+        mainLayout.setAlignment(Pos.CENTER);
+        Showing thisMovie = new Showing(movieId);
+
+        //Header
+        Label movieName = new Label(thisMovie.movieName);
+        Label startTime = new Label("Start Time: " + um.formatTime(thisMovie.showtime));
+        Label theaterNumber = new Label("Theater: " + thisMovie.theaterNumber);
+        HBox header = new HBox();
+        header.setAlignment(Pos.CENTER);
+        header.setSpacing(500.00);
+        header.getChildren().addAll(movieName, startTime, theaterNumber);
+        mainLayout.getChildren().addAll(header);
+
+        //This HBox is used for separating the user info and seat selection
+        HBox splitScreen = new HBox();
+        splitScreen.setSpacing(150.0);
+
+        //Left side of screen - the credit card info and email and stuff
+        GridPane userVals = new GridPane();
+        userVals.setPadding(new Insets(100, 100, 100, 100));
+        userVals.setVgap(10.0);
+        userVals.setHgap(10.0);
+        userVals.setAlignment(Pos.CENTER);
+
+        //Number of seats - label
+        Label numSeatSelectLabel = new Label("Select Number of Seats: ");
+        GridPane.setConstraints(numSeatSelectLabel, 0, 0);
+        userVals.getChildren().add(numSeatSelectLabel);
+        //Number of seats - drop down
+        ObservableList<Integer> options = FXCollections.observableArrayList(
+            1, 2, 3, 4, 5, 6, 7, 8
+        );
+        final ComboBox numSeatsDropDown = new ComboBox(options);
+        numSeatsDropDown.getSelectionModel().selectFirst();
+        numSeatsDropDown.setPrefWidth(175.0);
+        GridPane.setConstraints(numSeatsDropDown, 1, 0);
+        userVals.getChildren().add(numSeatsDropDown);
+
+        //Name on Credit Card - label
+        Label nameOnCardLabel = new Label("Name on Credit Card: ");
+        GridPane.setConstraints(nameOnCardLabel, 0, 1);
+        userVals.getChildren().add(nameOnCardLabel);
+        //Name on Credit Card - input
+        TextField nameInput = new TextField();
+        nameInput.setPromptText("name on credit card");
+        GridPane.setConstraints(nameInput, 1, 1);
+        userVals.getChildren().add(nameInput);
+
+        //Credit Card Number - label
+        Label creditNumLabel = new Label("Credit Card Number: ");
+        GridPane.setConstraints(creditNumLabel, 0, 2);
+        userVals.getChildren().add(creditNumLabel);
+        //Credit Card Number - input
+        TextField cardNumberInput = new TextField();
+        cardNumberInput.setPromptText("credit card number");
+        GridPane.setConstraints(cardNumberInput, 1, 2);
+        userVals.getChildren().add(cardNumberInput);
+
+        //Credit Card Expiration Date - Label
+        Label expDateLabel = new Label("Credit Card Expiration Date");
+        GridPane.setConstraints(expDateLabel, 0, 3);
+        userVals.getChildren().add(expDateLabel);
+        //Credit Card Expiration Date - input
+        DatePicker dp = new DatePicker();
+        GridPane.setConstraints(dp, 1 , 3);
+        userVals.getChildren().add(dp);
+
+        //Credit Card Security Code
+        Label securityCodeLabel = new Label("Credit Card Security Code");
+        GridPane.setConstraints(securityCodeLabel, 0, 4);
+        userVals.getChildren().add(securityCodeLabel);
+        //Credit Card Security Code - input
+        TextField secCodeInput = new TextField();
+        secCodeInput.setPromptText("security code");
+        GridPane.setConstraints(secCodeInput, 1, 4);
+        userVals.getChildren().add(secCodeInput);
+
+        //Zip Code - label
+        Label zipCodeLabel = new Label("Zip Code: ");
+        GridPane.setConstraints(zipCodeLabel, 0, 5);
+        userVals.getChildren().add(zipCodeLabel);
+        //Zip Code - input
+        TextField zipCodeInput = new TextField();
+        zipCodeInput.setPromptText("zip code");
+        GridPane.setConstraints(zipCodeInput, 1, 5);
+        userVals.getChildren().add(zipCodeInput);
+
+        //Email Label
+        Label emailLabel = new Label("Email: ");
+        GridPane.setConstraints(emailLabel, 0, 6);
+        userVals.getChildren().add(emailLabel);
+        //Email Input
+        TextField emailInput = new TextField();
+        emailInput.setPromptText("email");
+        GridPane.setConstraints(emailInput, 1, 6);
+        userVals.getChildren().add(emailInput);
+
+        //Add user input values to HBox
+        splitScreen.getChildren().add(userVals);
+
+        //Right side of screen - actual seat selection
+        GridPane seatSelector = new GridPane();
+        seatSelector.setPadding(new Insets(100, 100, 100, 100));
+        seatSelector.setHgap(10);
+        seatSelector.setVgap(10);
+
+        Rectangle seatRectanges[] = new Rectangle[100];
+
+        //Seat selection rectangles
+        for(int i = 0; i < 10; i++){
+            for(int j = 0; j < 10; j++){
+                int charLoc = i*10+j;
+                seatRectanges[charLoc] = new Rectangle();
+                seatRectanges[charLoc].setWidth(20);
+                seatRectanges[charLoc].setHeight(20);
+
+                if(thisMovie.seats.charAt(charLoc) == 'e'){
+                    seatRectanges[charLoc].setFill(Color.GRAY);
+                    seatRectanges[charLoc].setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent mouseEvent) {
+                            //Check if turning this seat green would go over selected seats #
+                            if(numberSeatsSelected < (int)numSeatsDropDown.getValue() && !seatRectanges[charLoc].getFill().equals(Color.GREEN)){
+                                seatRectanges[charLoc].setFill(Color.GREEN);
+                                numberSeatsSelected++;
+                            }else if(seatRectanges[charLoc].getFill().equals(Color.GREEN)){
+                                seatRectanges[charLoc].setFill(Color.GRAY);
+                                numberSeatsSelected--;
+                            }
+                            //If its red we do nothing, don't need a check
+                        }
+                    });
+                }else if(thisMovie.seats.charAt(charLoc) == 'o'){ //Occupied
+                    seatRectanges[charLoc].setFill(Color.RED);
+                }
+                GridPane.setConstraints(seatRectanges[charLoc], i, j);
+                seatSelector.getChildren().add(seatRectanges[charLoc]);
+            }
+        }
+        //Grid labels
+        for(int i = 0; i < 10; i++){
+            Label numLabel = new Label("" + (i + 1));
+            GridPane.setConstraints(numLabel, 10, i);
+            seatSelector.getChildren().add(numLabel);
+            Label letterLabel = new Label("" + (char)(i + 65));
+            GridPane.setConstraints(letterLabel, i, 10);
+            seatSelector.getChildren().add(letterLabel);
+        }
+
+        numSeatsDropDown.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                numberSeatsSelected = 0;
+                for(int i = 0; i < 10; i++) {
+                    for (int j = 0; j < 10; j++) {
+                        int charLoc = i * 10 + j;
+                        if(thisMovie.seats.charAt(charLoc) == 'e'){
+                            seatRectanges[charLoc].setFill(Color.GRAY);
+                        }
+                        else
+                        {
+                            seatRectanges[charLoc].setFill(Color.RED);
+                        }
+                    }
+                }
+            }
+        });
+
+        //Add seat selector to HBox
+        splitScreen.getChildren().add(seatSelector);
+        mainLayout.getChildren().addAll(splitScreen);
+
+        //Bottom navigation buttons
+        HBox bottomButtons = new HBox();
+        Button pay = new Button("Complete Purchase");
+        Button back = new Button("Previous Screen");
+        prevScene = window.getScene();
+        back.setOnAction(e -> window.setScene(prevScene));
+        bottomButtons.getChildren().addAll(pay, back);
+        bottomButtons.setAlignment(Pos.CENTER);
+        bottomButtons.setSpacing(10.0);
+        mainLayout.getChildren().add(bottomButtons);
+
+        Scene scene = new Scene(mainLayout, 1280, 720);
+        return scene;
+    }
+
+
+    public Color swapColor(Color current){
+        if(current.equals(Color.GRAY)){
+            return Color.GREEN;
+        }
+        else
+        {
+            return Color.GRAY;
+        }
     }
 }

@@ -122,9 +122,7 @@ public class AccountManager {
         try{
             Statement stmt = databaseConn.createStatement();
             String query = "SELECT * FROM customers WHERE email = '" + email + "' AND password = '" + password + "'";
-            System.out.println(query);
             ResultSet rs = stmt.executeQuery(query);
-            System.out.println("email: " + email + "\npassword: " + password);
             if(rs.next()){
                 return true;
             }
