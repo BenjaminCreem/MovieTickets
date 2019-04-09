@@ -22,6 +22,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 
 public class SceneSetter {
@@ -451,11 +452,30 @@ public class SceneSetter {
         Button back = new Button("Previous Screen");
         prevScene = window.getScene();
         back.setOnAction(e -> window.setScene(prevScene));
+        pay.setOnAction(e -> paymentClicked());
         bottomButtons.getChildren().addAll(pay, back);
         bottomButtons.setAlignment(Pos.CENTER);
         bottomButtons.setSpacing(10.0);
         mainLayout.getChildren().add(bottomButtons);
 
+        Scene scene = new Scene(mainLayout, 1280, 720);
+        return scene;
+    }
+
+    //TO DO - finish this so that payment manager does some stuff too
+    public void paymentClicked(){
+        window.setScene(paymentSuccessful());
+    }
+
+
+    public Scene paymentSuccessful(){
+        VBox mainLayout = new VBox();
+        mainLayout.setAlignment(Pos.CENTER);
+        Label successful = new Label("Payment Successful!");
+        mainLayout.getChildren().add(successful);
+        Button movieTheaterScreen = new Button("Go back to viewing Showtimes");
+        movieTheaterScreen.setOnAction(e -> window.setScene(getTheaterScene()));
+        mainLayout.getChildren().add(movieTheaterScreen);
         Scene scene = new Scene(mainLayout, 1280, 720);
         return scene;
     }
