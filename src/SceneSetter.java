@@ -43,6 +43,37 @@ public class SceneSetter {
         numberSeatsSelected = 0;
     }
 
+    public Scene firstScene(){
+        Scene customerScene = getLoginScene("customer");
+        Scene employeeScene = getLoginScene("employee");
+
+        //Info label
+        Label info = new Label("Welcome to Movie Tickets!");
+
+        //Login Buttons
+        Button cusLogin = new Button();
+        cusLogin.setText("Customer Login");
+        cusLogin.getStyleClass().add("button");
+        cusLogin.setId("cusLogin");
+        cusLogin.setOnAction(e -> window.setScene(customerScene)); //Lambda expression
+
+
+        Button empLogin = new Button();
+        empLogin.setText("Employee Login");
+        empLogin.getStyleClass().add("button");
+        empLogin.setId("empLogin");
+        empLogin.setOnAction(e -> window.setScene(employeeScene));
+
+
+        VBox layout = new VBox(20);
+        layout.setAlignment(Pos.CENTER);
+        layout.getChildren().addAll(info, cusLogin, empLogin);
+        Scene scene = new Scene(layout, 1280, 720);
+        scene.getStylesheets().add("styles.css");
+        setPrevScene(scene);
+        return scene;
+    }
+
     public Scene getLoginScene(String cusOrEmp){
         customerOrEmployee = cusOrEmp;
         VBox mainLayout = new VBox();
@@ -175,7 +206,7 @@ public class SceneSetter {
         //Add back button
         Button backButton = new Button("Back");
         backButton.getStyleClass().add("button");
-        backButton.setOnAction(e -> window.setScene(prevScene));
+        backButton.setOnAction(e -> window.setScene(firstScene()));
         mainLayout.getChildren().add(backButton);
 
 
@@ -261,9 +292,9 @@ public class SceneSetter {
 
         mainLayout.getChildren().add(grid);
 
-        Button backButton = new Button("Back");
+        Button backButton = new Button("Logout");
         prevScene = window.getScene();
-        backButton.setOnAction(e -> window.setScene(prevScene));
+        backButton.setOnAction(e -> window.setScene(firstScene()));
         mainLayout.getChildren().add(backButton);
 
         Scene scene = new Scene(mainLayout, 1280, 720);
@@ -451,7 +482,7 @@ public class SceneSetter {
         Button pay = new Button("Complete Purchase");
         Button back = new Button("Previous Screen");
         prevScene = window.getScene();
-        back.setOnAction(e -> window.setScene(prevScene));
+        back.setOnAction(e -> window.setScene(getTheaterScene()));
         pay.setOnAction(e -> paymentClicked());
         bottomButtons.getChildren().addAll(pay, back);
         bottomButtons.setAlignment(Pos.CENTER);

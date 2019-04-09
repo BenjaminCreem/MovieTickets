@@ -25,38 +25,9 @@ public class GUI extends Application{
         //Main Window
         window = primaryStage;
         window.setTitle("Movie Tickets");
-
-        //Set possible next scenes depending on user input
+        //First scene
         SceneSetter sm = new SceneSetter(window, thisScene);
-        customerScene = sm.getLoginScene("customer");
-        employeeScene = sm.getLoginScene("employee");
-
-        //Info label
-        Label info = new Label("Welcome to Movie Tickets!");
-
-        //Login Buttons
-        cusLogin = new Button();
-        cusLogin.setText("Customer Login");
-        cusLogin.getStyleClass().add("button");
-        cusLogin.setId("cusLogin");
-        cusLogin.setOnAction(e -> window.setScene(customerScene)); //Lambda expression
-
-
-        empLogin = new Button();
-        empLogin.setText("Employee Login");
-        empLogin.getStyleClass().add("button");
-        empLogin.setId("empLogin");
-        empLogin.setOnAction(e -> window.setScene(employeeScene));
-
-
-        VBox layout = new VBox(20);
-        layout.setAlignment(Pos.CENTER);
-        layout.getChildren().addAll(info, cusLogin, empLogin);
-
-        thisScene = new Scene(layout, 1280, 720);
-        thisScene.getStylesheets().add("styles.css");
-        sm.setPrevScene(thisScene); //Needed for back button
-        primaryStage.setScene(thisScene);
+        primaryStage.setScene(sm.firstScene());
         primaryStage.show();
     }
 
