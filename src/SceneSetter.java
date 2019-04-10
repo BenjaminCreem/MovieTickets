@@ -8,9 +8,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -125,71 +123,78 @@ public class SceneSetter {
             signup.setHgap(10); //Set horizontal spacing
             signup.setAlignment(Pos.CENTER);
 
+            //Signup name
+            Label nameSignup = new Label("Name: ");
+            GridPane.setConstraints(nameSignup, 0, 0);
+            //Name input
+            TextField nameInputSignup = new TextField();
+            nameInputSignup.setPromptText("name");
+            GridPane.setConstraints(nameInputSignup, 1, 0);
 
             //Signup email
             Label emailSignup = new Label("Email: ");
-            GridPane.setConstraints(emailSignup, 0, 0);
+            GridPane.setConstraints(emailSignup, 0, 1);
             //Email input
             TextField emailInputSignup = new TextField();
             emailInputSignup.setPromptText("email");
-            GridPane.setConstraints(emailInputSignup, 1, 0);
+            GridPane.setConstraints(emailInputSignup, 1, 1);
 
             //Signup Password
             Label passwordSignup = new Label("Password:");
-            GridPane.setConstraints(passwordSignup, 0, 1);
+            GridPane.setConstraints(passwordSignup, 0, 2);
             //Signup password input
             PasswordField passwordSignupInput = new PasswordField();
             passwordSignupInput.setPromptText("password");
-            GridPane.setConstraints(passwordSignupInput, 1, 1);
+            GridPane.setConstraints(passwordSignupInput, 1, 2);
 
             //Signup confirmPassword
             Label confPassSignup = new Label("Confirm Password:");
-            GridPane.setConstraints(confPassSignup, 0, 2);
+            GridPane.setConstraints(confPassSignup, 0, 3);
             //Signup confirmPassword input
             PasswordField confPassInput = new PasswordField();
             confPassInput.setPromptText("confirm password");
-            GridPane.setConstraints(confPassInput, 1, 2);
+            GridPane.setConstraints(confPassInput, 1, 3);
 
             //Credit card num input
             Label creditCardNum = new Label("Credit Card Number: ");
-            GridPane.setConstraints(creditCardNum, 0, 3);
+            GridPane.setConstraints(creditCardNum, 0, 4);
             //Credit card num input
             TextField creditInput = new TextField();
             creditInput.setPromptText("credit card number");
-            GridPane.setConstraints(creditInput, 1, 3);
+            GridPane.setConstraints(creditInput, 1, 4);
 
             //Credit card exp date
             Label creditCardDate = new Label("Credit Card Exp Date: ");
-            GridPane.setConstraints(creditCardDate, 0, 4);
+            GridPane.setConstraints(creditCardDate, 0, 5);
             //Credit card exp date input
             DatePicker dp = new DatePicker();
-            GridPane.setConstraints(dp, 1, 4);
+            GridPane.setConstraints(dp, 1, 5);
 
             //Credit card security code
             Label secCode = new Label("Security Code: ");
-            GridPane.setConstraints(secCode, 0, 5);
+            GridPane.setConstraints(secCode, 0, 6);
             //Credit card security code input
             TextField secCodeInput = new TextField();
             secCodeInput.setPromptText("security code");
-            GridPane.setConstraints(secCodeInput, 1, 5);
+            GridPane.setConstraints(secCodeInput, 1, 6);
 
             //Credit card zip code
             Label zipCode = new Label("Zip Code: ");
-            GridPane.setConstraints(zipCode, 0, 6);
+            GridPane.setConstraints(zipCode, 0, 7);
             //Zip code input
             TextField zipCodeInput = new TextField();
             zipCodeInput.setPromptText("zip code");
-            GridPane.setConstraints(zipCodeInput, 1, 6);
+            GridPane.setConstraints(zipCodeInput, 1, 7);
 
             //Add all to signup grid
-            signup.getChildren().addAll(emailSignup, emailInputSignup, passwordSignup, passwordSignupInput, confPassSignup, confPassInput,
+            signup.getChildren().addAll(nameSignup, nameInputSignup, emailSignup, emailInputSignup, passwordSignup, passwordSignupInput, confPassSignup, confPassInput,
                     creditCardNum, creditInput, creditCardDate, dp, secCode, secCodeInput, zipCode, zipCodeInput);
 
             //Signup button
             Button signupButton = new Button("Sign up");
             signupButton.getStyleClass().add("button");
-            signupButton.setOnAction(e -> signupClicked(emailInputSignup, passwordSignupInput, confPassInput, creditInput, dp, secCodeInput, zipCodeInput));
-            GridPane.setConstraints(signupButton, 1, 7);
+            signupButton.setOnAction(e -> signupClicked(nameInputSignup, emailInputSignup, passwordSignupInput, confPassInput, creditInput, dp, secCodeInput, zipCodeInput));
+            GridPane.setConstraints(signupButton, 1, 8);
             signup.getChildren().add(signupButton);
 
             //Add Signup grid to VBox
@@ -229,14 +234,14 @@ public class SceneSetter {
     }
 
 
-    private void signupClicked(TextField email, PasswordField pass, PasswordField confPass, TextField creditNum,
+    private void signupClicked(TextField name, TextField email, PasswordField pass, PasswordField confPass, TextField creditNum,
                                DatePicker dp, TextField secCode, TextField zipCode)
     {
         AccountManager am = new AccountManager();
         //Convert LocalDate object from dp to Date object because createCustomerAccount inside of AccountManager needs a Date object
         LocalDate ld = dp.getValue();
         java.sql.Date sqlDate = java.sql.Date.valueOf(ld.toString());
-        if(am.createCustomerAccount(email.getText(), pass.getText(), confPass.getText(), creditNum.getText(),
+        if(am.createCustomerAccount(name.getText(), email.getText(), pass.getText(), confPass.getText(), creditNum.getText(),
                 sqlDate, secCode.getText(), zipCode.getText())){
             //Signup successful, go to movie selection screen
             window.setScene(getTheaterScene());
@@ -478,7 +483,7 @@ public class SceneSetter {
         Button pay = new Button("Complete Purchase");
         Button back = new Button("Previous Screen");
         back.setOnAction(e -> window.setScene(getTheaterScene()));
-        pay.setOnAction(e -> paymentClicked());
+        pay.setOnAction(e -> paymentClicked(nameInput, cardNumberInput, dp.getValue(), secCodeInput, zipCodeInput, emailInput, thisMovie, seatRectanges));
         bottomButtons.getChildren().addAll(pay, back);
         bottomButtons.setAlignment(Pos.CENTER);
         bottomButtons.setSpacing(10.0);
@@ -489,8 +494,42 @@ public class SceneSetter {
     }
 
     //TO DO - finish this so that payment manager does some stuff too
-    public void paymentClicked(){
-        window.setScene(paymentSuccessful());
+    public void paymentClicked(TextField name, TextField num, LocalDate date, TextField secCode, TextField zip, TextField email, Showing showing, Rectangle seats[]){
+        //Make sure all fields are filed
+        boolean successful = true;
+        Border errorBorder = new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
+        if(name.getText() == null || name.getText().trim().isEmpty()){
+            successful = false;
+            name.setBorder(errorBorder);
+        }
+        if(num.getText() == null || num.getText().trim().isEmpty()){
+            successful = false;
+            num.setBorder(errorBorder);
+        }
+        if(date == null || date.isBefore(LocalDate.now())){
+            successful = false;
+            num.setBorder(errorBorder);
+        }
+        if(secCode.getText() == null || secCode.getText().trim().isEmpty()){
+            successful = false;
+            secCode.setBorder(errorBorder);
+        }
+        if(zip.getText() == null || zip.getText().trim().isEmpty()){
+            successful = false;
+            zip.setBorder(errorBorder);
+        }
+        if(email.getText() == null || email.getText().trim().isEmpty()){
+            successful = false;
+            email.setBorder(errorBorder);
+        }
+        if(successful){
+            for(int i = 0; i < seats.length; i++){
+                if(seats[i].getFill().equals(Color.GREEN)){
+                    showing.reserveSeat(i);
+                }
+            }
+            window.setScene(paymentSuccessful());
+        }
     }
 
 

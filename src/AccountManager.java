@@ -53,7 +53,7 @@ public class AccountManager {
      * to the customer table in the database.
      * @return true if account was created successfully, false if there was an error
      */
-    public boolean createCustomerAccount(String email, String password, String confirmPassword, String creditNum, Date expDate, String secCode, String zip){
+    public boolean createCustomerAccount(String name, String email, String password, String confirmPassword, String creditNum, Date expDate, String secCode, String zip){
         if(password.equals(confirmPassword)){
             try {
                 //Make sure no account already exists with that username
@@ -61,7 +61,7 @@ public class AccountManager {
                 ResultSet rs = stmt.executeQuery("SELECT email FROM customers WHERE email = '" + email + "'");
                 if(!rs.next())
                 {
-                    stmt.executeUpdate("INSERT INTO customers (email, password, creditNum, creditExpDate, secCode, zipCode) VALUES ('" + email + "', '" + password + "', '" + creditNum + "', '" +
+                    stmt.executeUpdate("INSERT INTO customers (name, email, password, creditNum, creditExpDate, secCode, zipCode) VALUES ('" + name + email + "', '" + password + "', '" + creditNum + "', '" +
                             expDate + "', '" + secCode + "', '" + zip + "');");
                     return true;
                 }
