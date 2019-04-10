@@ -28,12 +28,12 @@ public class TheaterManager {
         return databaseConn;
     }
 
-    public ArrayList<Showing> getShowings(int theaterNumber){
+    public ArrayList<Showing> getShowings(String movieName){
         ArrayList<Showing> showings = new ArrayList<Showing>();
         try {
             Showing s;
             Statement stmt = databaseConn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM showings WHERE theaterNumber = '" + theaterNumber + "'");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM showings WHERE movieName = '" + movieName + "'");
             while(rs.next()) {
                 s = new Showing(rs.getInt(1));
                 showings.add(s);
@@ -44,5 +44,19 @@ public class TheaterManager {
         }
 
         return showings;
+    }
+
+    public ArrayList<String> getMovieNames(){
+        ArrayList<String> movieNames = new ArrayList<>();
+        try{
+            Statement stmt = databaseConn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT movieName FROM showings GROUP BY movieName");
+            while(rs.next()){
+                movieNames.add(rs.getString(1));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return movieNames;
     }
 }

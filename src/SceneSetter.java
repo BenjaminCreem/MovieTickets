@@ -266,27 +266,26 @@ public class SceneSetter {
         grid.setHgap(10); //Set horizontal spacing
         grid.setAlignment(Pos.CENTER);
 
-        //Adding all movies to screen
         TheaterManager tm = new TheaterManager();
-        for(int i = 1; i <= 5; i++){ //Loop through all theaters - currently only 5 for simplicity
-            ArrayList<Showing> showings = tm.getShowings(i);
-            //We can use showings.get(0) here because all of the movies in showings will the same
-            //Movie name only changes each loop
-            Label theaterNumLabel = new Label(showings.get(0).movieName + " - Theater Number: " + i);
-            GridPane.setConstraints(theaterNumLabel, 0, i-1);
+        ArrayList<String> movies = tm.getMovieNames();
+        for(int i = 0; i < movies.size(); i++){
+            Label movieNameLabel = new Label(movies.get(i));
+            GridPane.setConstraints(movieNameLabel, 0, i);
+            grid.getChildren().add(movieNameLabel);
 
+            ArrayList<Showing> showings = tm.getShowings(movies.get(i));
             for(int j = 0; j < showings.size(); j++){
                 final int movieID = j;
+
                 UtilityMethods um = new UtilityMethods();
                 Hyperlink theaterLink = new Hyperlink(um.formatTime(showings.get(movieID).showtime));
-
                 theaterLink.setOnAction(e -> window.setScene(getSeatSelectionScreen(showings.get(movieID).id)));
 
-                GridPane.setConstraints(theaterLink, j + 1, i-1);
+                GridPane.setConstraints(theaterLink, j+1, i);
                 grid.getChildren().add(theaterLink);
             }
-            grid.getChildren().addAll(theaterNumLabel);
         }
+
 
         mainLayout.getChildren().add(grid);
 
