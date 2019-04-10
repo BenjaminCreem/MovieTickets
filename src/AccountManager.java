@@ -32,8 +32,13 @@ public class AccountManager {
                 //Make sure no account already exists with that username
                 Statement stmt = databaseConn.createStatement();
                 ResultSet rs = stmt.executeQuery("SELECT * FROM employees WHERE email = '" + email + "'");
+                byte realIsManager;
+                if(isManager)
+                    realIsManager = 1;
+                else
+                    realIsManager = 0;
                 if(!rs.next()){
-                    stmt.executeUpdate("INSERT INTO employees (email, password, isManager) VALUES ('" + email + "', '" + password + "', '" + isManager + "');");
+                    stmt.executeUpdate("INSERT INTO employees (email, password, isManager) VALUES ('" + email + "', '" + password + "', '" + realIsManager + "');");
                     return true;
                 }
             }
@@ -108,6 +113,24 @@ public class AccountManager {
         //Debug
         System.out.println(c);
         return c;
+    }
+
+    public Employee getEmployee(String email){
+        Employee emp = new Employee();
+        try{
+            Statement stmt = databaseConn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT email, isManager FROM employees WHERE email = '" + email + "'");
+            while(rs.next()){
+                emp.email = rs.getString(1);
+                byte m = rs.getByte(2);
+                Boolean isManager;
+                isManager = m == 1; //Convert Byte to Boolean
+                emp.isManager = isManager;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return emp;
     }
 
     /**

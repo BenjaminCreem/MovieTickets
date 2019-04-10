@@ -229,6 +229,7 @@ public class SceneSetter {
         AccountManager am = new AccountManager();
         if(am.employeeSignin(email.getText(), password.getText())){ //Correct username and password
             //Go to movie selection screen
+            loggedInUser = am.getEmployee(email.getText());
             window.setScene(getTheaterScene());
         }
     }
@@ -289,12 +290,110 @@ public class SceneSetter {
 
         mainLayout.getChildren().add(grid);
 
+        //Bottom nav bar for buttons. Only has 1 for customer but has multiple for manager or employee
+        HBox bottomNavBar = new HBox();
+        bottomNavBar.setAlignment(Pos.CENTER);
+        bottomNavBar.setSpacing(10.0);
         Button backButton = new Button("Logout");
         backButton.setOnAction(e -> window.setScene(firstScene()));
-        mainLayout.getChildren().add(backButton);
+        bottomNavBar.getChildren().add(backButton);
+        mainLayout.getChildren().add(bottomNavBar);
+
+        //Additional Stuff is user is manager
+        if(loggedInUser instanceof Employee){
+            Employee emp = (Employee) loggedInUser;
+            if(emp.isManager()){
+                Button addEmployeeButton = new Button("Add Employee");
+                addEmployeeButton.setOnAction(e -> window.setScene(addEmployeeScene()));
+                Button revenueButton = new Button("View Revenue Data");
+                revenueButton.setOnAction(e -> window.setScene(revenueScene()));
+                bottomNavBar.getChildren().addAll(addEmployeeButton, revenueButton);
+            }
+        }
+
 
         Scene scene = new Scene(mainLayout, 1280, 720);
         return scene;
+    }
+
+    public Scene revenueScene(){
+        VBox mainLayout = new VBox();
+        Scene scene = new Scene(mainLayout, 1280, 720);
+        return scene;
+    }
+
+    public Scene addEmployeeScene(){
+        VBox mainLayout = new VBox();
+        mainLayout.setAlignment(Pos.CENTER);
+        mainLayout.setSpacing(0.0);
+
+        Label mainLabel = new Label("Create Employee Account");
+        mainLayout.getChildren().add(mainLabel);
+
+        GridPane grid = new GridPane();
+        grid.setPadding(new Insets(100, 100, 100, 100)); //Border to window
+        grid.setVgap(10); //Set vertical spacing
+        grid.setHgap(10); //Set horizontal spacing
+        grid.setAlignment(Pos.CENTER);
+
+        //Employee email
+        Label emailLabel = new Label("Email: ");
+        GridPane.setConstraints(emailLabel, 0, 0);
+        TextField emailInput = new TextField();
+        emailInput.setPromptText("employee email");
+        GridPane.setConstraints(emailInput, 1, 0);
+        grid.getChildren().addAll(emailLabel, emailInput);
+
+        //Employee password
+        Label passwordLabel = new Label("Password: ");
+        GridPane.setConstraints(passwordLabel, 0, 1);
+        PasswordField passwordInput = new PasswordField();
+        passwordInput.setPromptText("employee password");
+        GridPane.setConstraints(passwordInput, 1, 1);
+        grid.getChildren().addAll(passwordLabel, passwordInput);
+
+        //Employee confirm password
+        Label confirmPassLabel = new Label("Confirm Password: ");
+        GridPane.setConstraints(confirmPassLabel, 0, 2);
+        PasswordField confirmPasswordInput = new PasswordField();
+        confirmPasswordInput.setPromptText("confirm password");
+        GridPane.setConstraints(confirmPasswordInput, 1, 2);
+        grid.getChildren().addAll(confirmPassLabel, confirmPasswordInput);
+
+        //Employee is manager toggle
+        Label isManagerLabel = new Label("Manager: ");
+        GridPane.setConstraints(isManagerLabel, 0, 3);
+        CheckBox isManagerCheck = new CheckBox();
+        isManagerCheck.setSelected(false);
+        GridPane.setConstraints(isManagerCheck, 1, 3);
+        grid.getChildren().addAll(isManagerLabel, isManagerCheck);
+
+        mainLayout.getChildren().add(grid);
+
+        //Back and add buttons
+        HBox bottomNavBar = new HBox();
+        bottomNavBar.setAlignment(Pos.CENTER);
+        bottomNavBar.setSpacing(10.0);
+        Button addEmployee = new Button("Add Employee");
+        addEmployee.setOnAction(e -> addEmpButtonClicked(emailInput, passwordInput, confirmPasswordInput, isManagerCheck));
+        Button back = new Button("Back");
+        back.setOnAction(e -> window.setScene(getTheaterScene()));
+        bottomNavBar.getChildren().addAll(addEmployee, back);
+
+        mainLayout.getChildren().add(bottomNavBar);
+
+
+        Scene scene = new Scene(mainLayout, 1280, 720);
+        return scene;
+    }
+
+    public void addEmpButtonClicked(TextField email, TextField pass, TextField confPass, CheckBox manager){
+        AccountManager am = new AccountManager();
+        if(email.getText() != null && !email.getText().trim().isEmpty() && pass.getText() != null && !pass.getText().trim().isEmpty() && confPass.getText() != null && !confPass.getText().trim().isEmpty()) {
+            if (am.createEmployeeAccount(email.getText(), pass.getText(), confPass.getText(), manager.isSelected())) {
+                window.setScene(getTheaterScene());
+            }
+        }
     }
 
     public Scene getSeatSelectionScreen(int movieId){
@@ -483,7 +582,7 @@ public class SceneSetter {
         Button pay = new Button("Complete Purchase");
         Button back = new Button("Previous Screen");
         back.setOnAction(e -> window.setScene(getTheaterScene()));
-        pay.setOnAction(e -> paymentClicked(nameInput, cardNumberInput, dp.getValue(), secCodeInput, zipCodeInput, emailInput, thisMovie, seatRectanges));
+        pay.setOnAction(e -> paymentClicked(nameInput, cardNumberInput, dp, secCodeInput, zipCodeInput, emailInput, thisMovie, seatRectanges));
         bottomButtons.getChildren().addAll(pay, back);
         bottomButtons.setAlignment(Pos.CENTER);
         bottomButtons.setSpacing(10.0);
@@ -494,7 +593,7 @@ public class SceneSetter {
     }
 
     //TO DO - finish this so that payment manager does some stuff too
-    public void paymentClicked(TextField name, TextField num, LocalDate date, TextField secCode, TextField zip, TextField email, Showing showing, Rectangle seats[]){
+    public void paymentClicked(TextField name, TextField num, DatePicker date, TextField secCode, TextField zip, TextField email, Showing showing, Rectangle seats[]){
         //Make sure all fields are filed
         boolean successful = true;
         Border errorBorder = new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
@@ -506,9 +605,9 @@ public class SceneSetter {
             successful = false;
             num.setBorder(errorBorder);
         }
-        if(date == null || date.isBefore(LocalDate.now())){
+        if(date.getValue() == null || date.getValue().isBefore(LocalDate.now())){
             successful = false;
-            num.setBorder(errorBorder);
+            date.setBorder(errorBorder);
         }
         if(secCode.getText() == null || secCode.getText().trim().isEmpty()){
             successful = false;
