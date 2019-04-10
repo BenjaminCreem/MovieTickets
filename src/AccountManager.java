@@ -1,6 +1,3 @@
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
 import java.sql.*;
 
 public class AccountManager {
@@ -95,13 +92,14 @@ public class AccountManager {
         Customer c = new Customer();
         try {
             Statement stmt = databaseConn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT email, creditNum, creditExpDate, secCode, zipCode FROM customers WHERE email = '" + email + "'");
+            ResultSet rs = stmt.executeQuery("SELECT name, email, creditNum, creditExpDate, secCode, zipCode FROM customers WHERE email = '" + email + "'");
             while(rs.next()){ //Should only be one person returned so this should only go through once
-                c.email = rs.getString(1);
-                c.creditNum = rs.getString(2);
-                c.creditExpDate = rs.getDate(3);
-                c.secCode = rs.getString(4);
-                c.zipCode = rs.getString(5);
+                c.name = rs.getString(1);
+                c.email = rs.getString(2);
+                c.creditNum = rs.getString(3);
+                c.creditExpDate = rs.getDate(4).toLocalDate();
+                c.secCode = rs.getString(5);
+                c.zipCode = rs.getString(6);
             }
         }
         catch(Exception e){

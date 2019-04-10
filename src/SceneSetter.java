@@ -215,7 +215,7 @@ public class SceneSetter {
         AccountManager am = new AccountManager();
         if(am.customerSignin(email.getText(), password.getText())){ //Correct username and password
             //Go to movie selection screen
-            loggedInUser = new Customer();
+            loggedInUser = am.getPaymentInfo(email.getText());
             window.setScene(getTheaterScene());
         }
     }
@@ -341,6 +341,7 @@ public class SceneSetter {
         //Name on Credit Card - input
         TextField nameInput = new TextField();
         nameInput.setPromptText("name on credit card");
+        nameInput.setText(loggedInUser.name());
         GridPane.setConstraints(nameInput, 1, 1);
         userVals.getChildren().add(nameInput);
 
@@ -351,6 +352,7 @@ public class SceneSetter {
         //Credit Card Number - input
         TextField cardNumberInput = new TextField();
         cardNumberInput.setPromptText("credit card number");
+        cardNumberInput.setText(loggedInUser.creditNum());
         GridPane.setConstraints(cardNumberInput, 1, 2);
         userVals.getChildren().add(cardNumberInput);
 
@@ -359,7 +361,7 @@ public class SceneSetter {
         GridPane.setConstraints(expDateLabel, 0, 3);
         userVals.getChildren().add(expDateLabel);
         //Credit Card Expiration Date - input
-        DatePicker dp = new DatePicker();
+        DatePicker dp = new DatePicker(loggedInUser.creditExpDate());
         GridPane.setConstraints(dp, 1 , 3);
         userVals.getChildren().add(dp);
 
@@ -370,6 +372,7 @@ public class SceneSetter {
         //Credit Card Security Code - input
         TextField secCodeInput = new TextField();
         secCodeInput.setPromptText("security code");
+        secCodeInput.setText(loggedInUser.secCode());
         GridPane.setConstraints(secCodeInput, 1, 4);
         userVals.getChildren().add(secCodeInput);
 
@@ -380,6 +383,7 @@ public class SceneSetter {
         //Zip Code - input
         TextField zipCodeInput = new TextField();
         zipCodeInput.setPromptText("zip code");
+        zipCodeInput.setText(loggedInUser.zipCode());
         GridPane.setConstraints(zipCodeInput, 1, 5);
         userVals.getChildren().add(zipCodeInput);
 
@@ -390,6 +394,7 @@ public class SceneSetter {
         //Email Input
         TextField emailInput = new TextField();
         emailInput.setPromptText("email");
+        emailInput.setText(loggedInUser.email());
         GridPane.setConstraints(emailInput, 1, 6);
         userVals.getChildren().add(emailInput);
 
