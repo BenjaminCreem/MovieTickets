@@ -26,7 +26,7 @@ public class GUI extends Application{
         window = primaryStage;
         window.setTitle("Movie Tickets");
         //First scene
-        SceneSetter sm = new SceneSetter(window, thisScene);
+        SceneSetter sm = new SceneSetter(window);
         primaryStage.setScene(sm.firstScene());
         primaryStage.show();
     }

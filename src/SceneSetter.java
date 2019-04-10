@@ -28,18 +28,15 @@ import java.util.concurrent.TimeUnit;
 public class SceneSetter {
 
     private Stage window;
-    private Scene prevScene;
+    private User loggedInUser;
     private String customerOrEmployee;
-    private Scene home;
 
 
     //Used for screen where user inputs their seats
     private int numberSeatsSelected;
 
-    public SceneSetter(Stage w, Scene oldScene){
+    public SceneSetter(Stage w){
         window = w;
-        prevScene = oldScene;
-        home = oldScene;
         numberSeatsSelected = 0;
     }
 
@@ -70,7 +67,6 @@ public class SceneSetter {
         layout.getChildren().addAll(info, cusLogin, empLogin);
         Scene scene = new Scene(layout, 1280, 720);
         scene.getStylesheets().add("styles.css");
-        setPrevScene(scene);
         return scene;
     }
 
@@ -219,6 +215,7 @@ public class SceneSetter {
         AccountManager am = new AccountManager();
         if(am.customerSignin(email.getText(), password.getText())){ //Correct username and password
             //Go to movie selection screen
+            loggedInUser = new Customer();
             window.setScene(getTheaterScene());
         }
     }
@@ -249,11 +246,6 @@ public class SceneSetter {
             System.out.println("Error creating account");
         }
     }
-
-    public void setPrevScene(Scene p){
-        prevScene = p;
-    }
-
 
 
     public Scene getTheaterScene(){
@@ -293,7 +285,6 @@ public class SceneSetter {
         mainLayout.getChildren().add(grid);
 
         Button backButton = new Button("Logout");
-        prevScene = window.getScene();
         backButton.setOnAction(e -> window.setScene(firstScene()));
         mainLayout.getChildren().add(backButton);
 
@@ -481,7 +472,6 @@ public class SceneSetter {
         HBox bottomButtons = new HBox();
         Button pay = new Button("Complete Purchase");
         Button back = new Button("Previous Screen");
-        prevScene = window.getScene();
         back.setOnAction(e -> window.setScene(getTheaterScene()));
         pay.setOnAction(e -> paymentClicked());
         bottomButtons.getChildren().addAll(pay, back);

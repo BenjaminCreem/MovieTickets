@@ -1,6 +1,6 @@
 import java.util.Date;
 
-public class Customer {
+public class Customer extends User{
     String email;
     String creditNum;
     Date creditExpDate;
