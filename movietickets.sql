@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 09, 2019 at 05:39 PM
+-- Generation Time: Apr 10, 2019 at 05:40 AM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.2
 
@@ -30,6 +30,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `customers` (
   `id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `creditNum` varchar(16) NOT NULL,
@@ -42,12 +43,12 @@ CREATE TABLE `customers` (
 -- Dumping data for table `customers`
 --
 
-INSERT INTO `customers` (`id`, `email`, `password`, `creditNum`, `creditExpDate`, `secCode`, `zipCode`) VALUES
-(2, 'benjamincreem@gmail.com', 'myPass', '5555555555555555', '2068-06-18', '123', '02115'),
-(3, 'creem@wit.edu', '1', '1', '2019-03-07', '1', '1'),
-(4, 'alex@gmail.com', 'turtle', '5555222266669999', '2027-04-03', '123', '02154'),
-(5, 'tom@gmail.com', 'asdf', '5555555555555555', '2019-05-11', '123', '12345'),
-(6, 'd', 'd', 'd', '2019-04-27', '3', '3');
+INSERT INTO `customers` (`id`, `name`, `email`, `password`, `creditNum`, `creditExpDate`, `secCode`, `zipCode`) VALUES
+(2, 'Ben Creem', 'benjamincreem@gmail.com', 'myPass', '5555555555555555', '2068-06-18', '123', '02115'),
+(3, 'Ben Creem 2', 'creem@wit.edu', '1', '1', '2019-03-07', '1', '1'),
+(4, 'Alex Creem', 'alex@gmail.com', 'turtle', '5555222266669999', '2027-04-03', '123', '02154'),
+(5, 'Tom Selleck', 'tom@gmail.com', 'asdf', '5555555555555555', '2019-05-11', '123', '12345'),
+(6, 'ddd', 'd', 'd', 'd', '2019-04-27', '3', '3');
 
 -- --------------------------------------------------------
 
