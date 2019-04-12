@@ -18,6 +18,11 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
+
+DROP TABLE IF EXISTS showings;
+DROP TABLE IF EXISTS employees;
+DROP TABLE IF EXISTS customers;
+
 --
 -- Database: `movietickets`
 --
@@ -27,6 +32,7 @@ SET time_zone = "+00:00";
 --
 -- Table structure for table `customers`
 --
+
 
 CREATE TABLE `customers` (
   `id` int(10) UNSIGNED NOT NULL,
