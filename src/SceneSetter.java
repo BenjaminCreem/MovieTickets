@@ -321,6 +321,121 @@ public class SceneSetter {
 
     public Scene snackPurchaseScene(){
         VBox mainLayout = new VBox();
+        mainLayout.setAlignment(Pos.CENTER);
+        mainLayout.setSpacing(0.0);
+
+        Label mainLabel = new Label("Purchase Snacks");
+        mainLayout.getChildren().add(mainLabel);
+
+        GridPane grid = new GridPane();
+        grid.setPadding(new Insets(100, 100, 100, 100)); //Border to window
+        grid.setVgap(10); //Set vertical spacing
+        grid.setHgap(10); //Set horizontal spacing
+        grid.setAlignment(Pos.CENTER);
+
+        //Popcorn
+        Label popcornLabel = new Label("Popcorn: ");
+        GridPane.setConstraints(popcornLabel, 0, 0);
+        grid.getChildren().add(popcornLabel);
+        //Popcorn - drop down
+        ObservableList<Integer> options = FXCollections.observableArrayList(
+                0, 1, 2, 3, 4, 5, 6, 7, 8
+        );
+        final ComboBox popcornDropDown = new ComboBox(options);
+        popcornDropDown.getSelectionModel().selectFirst();
+        popcornDropDown.setPrefWidth(175.0);
+        GridPane.setConstraints(popcornDropDown, 1, 0);
+        grid.getChildren().add(popcornDropDown);
+
+        //Drinks
+        Label drinkLabel = new Label("Drink(s): ");
+        GridPane.setConstraints(drinkLabel, 0, 1);
+        grid.getChildren().add(drinkLabel);
+
+        final ComboBox drinkDropDown = new ComboBox(options);
+        drinkDropDown.getSelectionModel().selectFirst();
+        drinkDropDown.setPrefWidth(175.0);
+        GridPane.setConstraints(drinkDropDown, 1, 1);
+        grid.getChildren().add(drinkDropDown);
+
+        //Candy
+        Label candyLabel = new Label("Candy: ");
+        GridPane.setConstraints(candyLabel, 0, 2);
+        grid.getChildren().add(candyLabel);
+
+        final ComboBox candyDropDown = new ComboBox(options);
+        candyDropDown.getSelectionModel().selectFirst();
+        candyDropDown.setPrefWidth(175.0);
+        GridPane.setConstraints(candyDropDown, 1, 2);
+        grid.getChildren().add(candyDropDown);
+
+        //Name on Credit Card - label
+        Label nameOnCardLabel = new Label("Name on Credit Card: ");
+        GridPane.setConstraints(nameOnCardLabel, 0, 3);
+        grid.getChildren().add(nameOnCardLabel);
+        //Name on Credit Card - input
+        TextField nameInput = new TextField();
+        nameInput.setPromptText("name on credit card");
+        nameInput.setText(loggedInUser.name());
+        GridPane.setConstraints(nameInput, 1, 3);
+        grid.getChildren().add(nameInput);
+
+        //Credit Card Number - label
+        Label creditNumLabel = new Label("Credit Card Number: ");
+        GridPane.setConstraints(creditNumLabel, 0, 4);
+        grid.getChildren().add(creditNumLabel);
+        //Credit Card Number - input
+        TextField cardNumberInput = new TextField();
+        cardNumberInput.setPromptText("credit card number");
+        cardNumberInput.setText(loggedInUser.creditNum());
+        GridPane.setConstraints(cardNumberInput, 1, 4);
+        grid.getChildren().add(cardNumberInput);
+
+        //Credit Card Expiration Date - Label
+        Label expDateLabel = new Label("Credit Card Expiration Date");
+        GridPane.setConstraints(expDateLabel, 0, 5);
+        grid.getChildren().add(expDateLabel);
+        //Credit Card Expiration Date - input
+        DatePicker dp = new DatePicker(loggedInUser.creditExpDate());
+        GridPane.setConstraints(dp, 1 , 5);
+        grid.getChildren().add(dp);
+
+        //Credit Card Security Code
+        Label securityCodeLabel = new Label("Credit Card Security Code");
+        GridPane.setConstraints(securityCodeLabel, 0, 6);
+        grid.getChildren().add(securityCodeLabel);
+        //Credit Card Security Code - input
+        TextField secCodeInput = new TextField();
+        secCodeInput.setPromptText("security code");
+        secCodeInput.setText(loggedInUser.secCode());
+        GridPane.setConstraints(secCodeInput, 1, 6);
+        grid.getChildren().add(secCodeInput);
+
+        //Zip Code - label
+        Label zipCodeLabel = new Label("Zip Code: ");
+        GridPane.setConstraints(zipCodeLabel, 0, 7);
+        grid.getChildren().add(zipCodeLabel);
+        //Zip Code - input
+        TextField zipCodeInput = new TextField();
+        zipCodeInput.setPromptText("zip code");
+        zipCodeInput.setText(loggedInUser.zipCode());
+        GridPane.setConstraints(zipCodeInput, 1, 7);
+        grid.getChildren().add(zipCodeInput);
+
+        mainLayout.getChildren().add(grid);
+
+        //Bottom navigation buttons
+        HBox bottomButtons = new HBox();
+        Button pay = new Button("Complete Purchase");
+        Button back = new Button("Previous Screen");
+        back.setOnAction(e -> window.setScene(getTheaterScene()));
+        pay.setOnAction(e -> snackPaymentClicked(nameInput, cardNumberInput, dp, secCodeInput, zipCodeInput,
+                popcornDropDown.getValue().toString(), drinkDropDown.getValue().toString(), candyDropDown.getValue().toString()));
+        bottomButtons.getChildren().addAll(pay, back);
+        bottomButtons.setAlignment(Pos.CENTER);
+        bottomButtons.setSpacing(10.0);
+        mainLayout.getChildren().add(bottomButtons);
+
         Scene scene = new Scene(mainLayout, 1280, 720);
         return scene;
     }
@@ -620,7 +735,6 @@ public class SceneSetter {
         window.setScene(paymentSuccessful());
     }
 
-    //TO DO - finish this so that payment manager does some stuff too
     public void paymentClicked(TextField name, TextField num, DatePicker date, TextField secCode, TextField zip, TextField email, Showing showing, Rectangle seats[]){
         //Make sure all fields are filed
         boolean successful = true;
@@ -656,6 +770,7 @@ public class SceneSetter {
                 pm.updateRevenue(true,false,false,false);
                 if(seats[i].getFill().equals(Color.GREEN)){
                     showing.reserveSeat(i);
+                    pm.updateRevenue(true,false,false,false);       //every time a seat is changed to green, payment manager is also notified
                 }
             }
             window.setScene(paymentSuccessful());
@@ -671,6 +786,65 @@ public class SceneSetter {
         Button movieTheaterScreen = new Button("Go back to viewing Showtimes");
         movieTheaterScreen.setOnAction(e -> window.setScene(getTheaterScene()));
         mainLayout.getChildren().add(movieTheaterScreen);
+        Scene scene = new Scene(mainLayout, 1280, 720);
+        return scene;
+    }
+
+    //used in snack purchase screen
+    public void snackPaymentClicked(TextField name, TextField num, DatePicker date, TextField secCode, TextField zip, String pop, String dr, String can){
+        //Make sure all fields are filed
+        boolean successful = true;
+        PaymentManager pm = new PaymentManager();
+
+        Border errorBorder = new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
+        if(name.getText() == null || name.getText().trim().isEmpty()){
+            successful = false;
+            name.setBorder(errorBorder);
+        }
+        if(num.getText() == null || num.getText().trim().isEmpty() || !pm.validateCard(num.getText())){
+            successful = false;
+            num.setBorder(errorBorder);
+        }
+        if(date.getValue() == null || date.getValue().isBefore(LocalDate.now())){
+            successful = false;
+            date.setBorder(errorBorder);
+        }
+        if(secCode.getText() == null || secCode.getText().trim().isEmpty()){
+            successful = false;
+            secCode.setBorder(errorBorder);
+        }
+        if(zip.getText() == null || zip.getText().trim().isEmpty()){
+            successful = false;
+            zip.setBorder(errorBorder);
+        }
+        if(successful){
+            int p = Integer.parseInt(pop);
+            int d = Integer.parseInt(dr);
+            int c = Integer.parseInt(can);
+
+            for (int i = 0; i < p; i++){
+                pm.updateRevenue(false, true, false, false);
+            }
+            for (int i = 0; i < d; i++){
+                pm.updateRevenue(false, false, true, false);
+            }
+            for (int i = 0; i < c; i++){
+                pm.updateRevenue(false, false, false, true);
+            }
+
+            window.setScene(snackPaymentSuccessful());
+        }
+    }
+
+
+    public Scene snackPaymentSuccessful(){
+        VBox mainLayout = new VBox();
+        mainLayout.setAlignment(Pos.CENTER);
+        Label successful = new Label("Payment Successful!");
+        mainLayout.getChildren().add(successful);
+        Button snackScreen = new Button("Go back to snack purchase");
+        snackScreen.setOnAction(e -> window.setScene(snackPurchaseScene()));
+        mainLayout.getChildren().add(snackScreen);
         Scene scene = new Scene(mainLayout, 1280, 720);
         return scene;
     }
