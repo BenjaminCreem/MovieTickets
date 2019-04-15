@@ -432,6 +432,14 @@ public class SceneSetter {
         back.setOnAction(e -> window.setScene(getTheaterScene()));
         pay.setOnAction(e -> snackPaymentClicked(nameInput, cardNumberInput, dp, secCodeInput, zipCodeInput,
                 popcornDropDown.getValue().toString(), drinkDropDown.getValue().toString(), candyDropDown.getValue().toString()));
+
+        //If user is employee they can pay in cash
+        if(loggedInUser instanceof Employee){
+            Button cashButton = new Button("Payed in Cash");
+            cashButton.setOnAction(e -> snackPaymentClickedCash(popcornDropDown.getValue().toString(), drinkDropDown.getValue().toString(), candyDropDown.getValue().toString()));
+            bottomButtons.getChildren().add(cashButton);
+        }
+
         bottomButtons.getChildren().addAll(pay, back);
         bottomButtons.setAlignment(Pos.CENTER);
         bottomButtons.setSpacing(10.0);
@@ -741,6 +749,7 @@ public class SceneSetter {
         Scene scene = new Scene(mainLayout, 1280, 720);
         return scene;
     }
+
     private void paymentClickedCash(Rectangle seats[], Showing showing){
         PaymentManager pm = new PaymentManager();
         for(int i = 0; i < seats.length; i++){
@@ -782,7 +791,6 @@ public class SceneSetter {
         }
         if(successful){
             for(int i = 0; i < seats.length; i++){
-                pm.updateRevenue(true,false,false,false);
                 if(seats[i].getFill().equals(Color.GREEN)){
                     showing.reserveSeat(i);
                     pm.updateRevenue(true,false,false,false);       //every time a seat is changed to green, payment manager is also notified
@@ -849,6 +857,24 @@ public class SceneSetter {
 
             window.setScene(snackPaymentSuccessful());
         }
+    }
+
+    private void snackPaymentClickedCash(String pop, String dr, String can){
+        PaymentManager pm = new PaymentManager();
+        int p = Integer.parseInt(pop);
+        int d = Integer.parseInt(dr);
+        int c = Integer.parseInt(can);
+
+        for (int i = 0; i < p; i++){
+            pm.updateRevenue(false, true, false, false);
+        }
+        for (int i = 0; i < d; i++){
+            pm.updateRevenue(false, false, true, false);
+        }
+        for (int i = 0; i < c; i++){
+            pm.updateRevenue(false, false, false, true);
+        }
+        window.setScene(paymentSuccessful());
     }
 
 
