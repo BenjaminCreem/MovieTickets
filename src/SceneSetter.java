@@ -429,7 +429,8 @@ public class SceneSetter {
         Button pay = new Button("Complete Purchase");
         Button back = new Button("Previous Screen");
         back.setOnAction(e -> window.setScene(getTheaterScene()));
-        pay.setOnAction(e -> snackPaymentClicked(nameInput, cardNumberInput, dp, secCodeInput, zipCodeInput));
+        pay.setOnAction(e -> snackPaymentClicked(nameInput, cardNumberInput, dp, secCodeInput, zipCodeInput,
+                popcornDropDown.getValue().toString(), drinkDropDown.getValue().toString(), candyDropDown.getValue().toString()));
         bottomButtons.getChildren().addAll(pay, back);
         bottomButtons.setAlignment(Pos.CENTER);
         bottomButtons.setSpacing(10.0);
@@ -715,7 +716,6 @@ public class SceneSetter {
         return scene;
     }
 
-    //TO DO - finish this so that payment manager does some stuff too
     public void paymentClicked(TextField name, TextField num, DatePicker date, TextField secCode, TextField zip, TextField email, Showing showing, Rectangle seats[]){
         //Make sure all fields are filed
         boolean successful = true;
@@ -771,7 +771,7 @@ public class SceneSetter {
     }
 
     //used in snack purchase screen
-    public void snackPaymentClicked(TextField name, TextField num, DatePicker date, TextField secCode, TextField zip){
+    public void snackPaymentClicked(TextField name, TextField num, DatePicker date, TextField secCode, TextField zip, String pop, String dr, String can){
         //Make sure all fields are filed
         boolean successful = true;
         PaymentManager pm = new PaymentManager();
@@ -798,6 +798,19 @@ public class SceneSetter {
             zip.setBorder(errorBorder);
         }
         if(successful){
+            int p = Integer.parseInt(pop);
+            int d = Integer.parseInt(dr);
+            int c = Integer.parseInt(can);
+
+            for (int i = 0; i < p; i++){
+                pm.updateRevenue(false, true, false, false);
+            }
+            for (int i = 0; i < d; i++){
+                pm.updateRevenue(false, false, true, false);
+            }
+            for (int i = 0; i < c; i++){
+                pm.updateRevenue(false, false, false, true);
+            }
 
             window.setScene(snackPaymentSuccessful());
         }
