@@ -704,6 +704,7 @@ public class SceneSetter {
         //Bottom navigation buttons
         HBox bottomButtons = new HBox();
         Button pay = new Button("Complete Purchase");
+
         Button back = new Button("Previous Screen");
         back.setOnAction(e -> window.setScene(getTheaterScene()));
         pay.setOnAction(e -> paymentClicked(nameInput, cardNumberInput, dp, secCodeInput, zipCodeInput, emailInput, thisMovie, seatRectanges));
