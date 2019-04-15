@@ -595,12 +595,14 @@ public class SceneSetter {
     public void paymentClicked(TextField name, TextField num, DatePicker date, TextField secCode, TextField zip, TextField email, Showing showing, Rectangle seats[]){
         //Make sure all fields are filed
         boolean successful = true;
+        PaymentManager pm = new PaymentManager();
+
         Border errorBorder = new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
         if(name.getText() == null || name.getText().trim().isEmpty()){
             successful = false;
             name.setBorder(errorBorder);
         }
-        if(num.getText() == null || num.getText().trim().isEmpty()){
+        if(num.getText() == null || num.getText().trim().isEmpty() || !pm.validateCard(num.getText())){
             successful = false;
             num.setBorder(errorBorder);
         }
@@ -621,6 +623,7 @@ public class SceneSetter {
             email.setBorder(errorBorder);
         }
         if(successful){
+            pm.updateRevenue(true,false,false,false);
             for(int i = 0; i < seats.length; i++){
                 if(seats[i].getFill().equals(Color.GREEN)){
                     showing.reserveSeat(i);
