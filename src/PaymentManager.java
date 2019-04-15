@@ -1,3 +1,7 @@
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
+
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -36,6 +40,59 @@ public class PaymentManager {
             return true;
         }
         return false;
+    }
+
+    public GridPane getPaymentData(){
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setVgap(5.0);
+        grid.setHgap(5.0);
+        Label dateLbl = new Label("Date");
+        GridPane.setConstraints(dateLbl, 0, 0);
+        Label totalLbl = new Label("Total");
+        GridPane.setConstraints(totalLbl, 1, 0);
+        Label ticketLbl = new Label("Ticket");
+        GridPane.setConstraints(ticketLbl, 2, 0);
+        Label popLbl = new Label("Popcorn");
+        GridPane.setConstraints(popLbl, 3, 0);
+        Label drinkLbl = new Label("Drinks");
+        GridPane.setConstraints(drinkLbl, 4, 0);
+        Label candyLbl = new Label("Candy");
+        GridPane.setConstraints(candyLbl, 5, 0);
+        grid.getChildren().addAll(dateLbl, totalLbl, ticketLbl, popLbl, drinkLbl, candyLbl);
+
+        try {
+            Statement stmt = databaseConn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM revenue");
+            int i = 1;
+            while(rs.next()){
+                Date date = rs.getDate(1);
+                double total = rs.getDouble(2);
+                double ticket = rs.getDouble(3);
+                double popcorn = rs.getDouble(4);
+                double drink = rs.getDouble(5);
+                double candy = rs.getDouble(6);
+                Label dat = new Label("" + date);
+                Label tot = new Label("" + total);
+                Label tick = new Label("" + ticket);
+                Label pop = new Label("" + popcorn);
+                Label drnk = new Label("" + drink);
+                Label cndy = new Label("" + candy);
+                GridPane.setConstraints(dat, 0, i);
+                GridPane.setConstraints(tot, 1, i);
+                GridPane.setConstraints(tick, 2, i);
+                GridPane.setConstraints(pop, 3, i);
+                GridPane.setConstraints(drnk, 4, i);
+                GridPane.setConstraints(cndy, 5, i);
+                grid.getChildren().addAll(dat, tot, tick, pop, drnk, cndy);
+                i++;
+            }
+
+        }catch(Exception ignored){
+
+        }
+
+        return grid;
     }
 
     //indicates whether a ticket, popcorn, drink, or candy is purchased

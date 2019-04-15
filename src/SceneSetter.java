@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -442,7 +443,20 @@ public class SceneSetter {
 
     public Scene revenueScene(){
         VBox mainLayout = new VBox();
+        mainLayout.setSpacing(10.0);
+        mainLayout.setAlignment(Pos.CENTER);
         Scene scene = new Scene(mainLayout, 1280, 720);
+        PaymentManager pm = new PaymentManager();
+        Label titleOfPage = new Label("Revenue");
+        mainLayout.getChildren().addAll(titleOfPage);
+
+        mainLayout.getChildren().add(pm.getPaymentData());
+
+        Button back = new Button("Back");
+        back.setOnAction(e -> window.setScene(getTheaterScene()));
+        mainLayout.getChildren().addAll(back);
+
+
         return scene;
     }
 
