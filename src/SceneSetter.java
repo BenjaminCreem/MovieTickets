@@ -298,9 +298,13 @@ public class SceneSetter {
         bottomNavBar.getChildren().add(backButton);
         mainLayout.getChildren().add(bottomNavBar);
 
-        //Additional Stuff is user is manager
+        //Additional Stuff if user is employee
         if(loggedInUser instanceof Employee){
             Employee emp = (Employee) loggedInUser;
+            Button snackPurchaseButton = new Button("Snack Purchases");
+            snackPurchaseButton.setOnAction(e -> window.setScene(snackPurchaseScene()));
+            bottomNavBar.getChildren().add(snackPurchaseButton);
+            //Additional Stuff if user is manager
             if(emp.isManager()){
                 Button addEmployeeButton = new Button("Add Employee");
                 addEmployeeButton.setOnAction(e -> window.setScene(addEmployeeScene()));
@@ -311,6 +315,12 @@ public class SceneSetter {
         }
 
 
+        Scene scene = new Scene(mainLayout, 1280, 720);
+        return scene;
+    }
+
+    public Scene snackPurchaseScene(){
+        VBox mainLayout = new VBox();
         Scene scene = new Scene(mainLayout, 1280, 720);
         return scene;
     }
