@@ -1,7 +1,8 @@
 import java.sql.*;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class PaymentManager {
 
@@ -19,7 +20,7 @@ public class PaymentManager {
         String myDatabase = "MovieTickets";
         String url = "jdbc:mysql://" + serverName + "/" + myDatabase;
         String username = "root";
-        String password = "shockfire3DG";
+        String password = "KFZ73bx844FB10xH";
         try {
             Class.forName(driverName);
             databaseConn = DriverManager.getConnection(url, username, password);
@@ -43,57 +44,75 @@ public class PaymentManager {
             //check if there's an entry for current date
             Statement stmt = databaseConn.createStatement();
 
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date currentDate = new Date();
+            LocalDate ld = LocalDate.now();
+            Date currentDate = java.sql.Date.valueOf(ld.toString());
 
             ResultSet rs = stmt.executeQuery("SELECT * FROM revenue WHERE date = '" + currentDate + "'");
             if(!rs.next()) {
-                stmt.executeUpdate("INSERT INTO revenue (date, total, ticket, popcorn, drink, candy) VALUES ('" + currentDate + 0 + "', '" + 0 + "', '" + 0 + "', '" +
+                stmt.executeUpdate("INSERT INTO revenue (date, total, ticket, popcorn, drink, candy) VALUES ('" + currentDate + "', '" + 0 + "', '" + 0 + "', '" +
                         0 + "', '" + 0 + "', '" + 0 + "');");
             }
             //updates total and whatever else was marked true with the correct pricing
-            else{
-                String sql = "SELECT total FROM revenue WHERE date = '" + currentDate + "'";
-                ResultSet total = stmt.executeQuery(sql);
-                //if ticket is purchased
-                if (tick){
+            String sql = "SELECT total FROM revenue WHERE date = '" + currentDate + "'";
+            ResultSet totalResult = stmt.executeQuery(sql);
+            double total = 0.0;
+            if(totalResult.next()) {
+                total = totalResult.getDouble(1);
+            }
+            DecimalFormat decForm = new DecimalFormat("###.##");
 
-                    sql = "UPDATE revenue SET total = '" + total+tprice + "' WHERE date = '" + currentDate + "'";
-                    stmt.executeUpdate(sql);
+            //if ticket is purchased
+            if (tick){
 
-                    sql = "SELECT ticket FROM revenue WHERE date = '" + currentDate + "'";
-                    ResultSet ticket = stmt.executeQuery(sql);
-                    sql = "UPDATE revenue SET ticket = '" + ticket+tprice + "' WHERE date = '" + currentDate + "'";
+
+                sql = "UPDATE revenue SET total = '" + decForm.format(total+tprice) + "' WHERE date = '" + currentDate + "'";
+                stmt.executeUpdate(sql);
+
+                sql = "SELECT ticket FROM revenue WHERE date = '" + currentDate + "'";
+                ResultSet ticketResult = stmt.executeQuery(sql);
+                if(ticketResult.next()) {
+                    double ticket = ticketResult.getDouble(1);
+                    sql = "UPDATE revenue SET ticket = '" + decForm.format(ticket + tprice) + "' WHERE date = '" + currentDate + "'";
                     stmt.executeUpdate(sql);
                 }
-                //if popcorn is purchased
-                if(pop){
-                    sql = "UPDATE revenue SET total = '" + total+pprice + "' WHERE date = '" + currentDate + "'";
-                    stmt.executeUpdate(sql);
+            }
+            //if popcorn is purchased
+            if(pop){
+                sql = "UPDATE revenue SET total = '" + decForm.format(total+pprice) + "' WHERE date = '" + currentDate + "'";
+                stmt.executeUpdate(sql);
 
-                    sql = "SELECT popcorn FROM revenue WHERE date = '" + currentDate + "'";
-                    ResultSet popcorn = stmt.executeQuery(sql);
-                    sql = "UPDATE revenue SET popcorn = '" + popcorn+pprice + "' WHERE date = '" + currentDate + "'";
+                sql = "SELECT popcorn FROM revenue WHERE date = '" + currentDate + "'";
+                ResultSet popcornResult = stmt.executeQuery(sql);
+                if(popcornResult.next()){
+                    double popcorn = popcornResult.getDouble(1);
+                    sql = "UPDATE revenue SET popcorn = '" + decForm.format(popcorn+pprice) + "' WHERE date = '" + currentDate + "'";
                     stmt.executeUpdate(sql);
                 }
-                //if drink is purchased
-                if(dr){
-                    sql = "UPDATE revenue SET total = '" + total+dprice + "' WHERE date = '" + currentDate + "'";
-                    stmt.executeUpdate(sql);
 
-                    sql = "SELECT drink FROM revenue WHERE date = '" + currentDate + "'";
-                    ResultSet drink = stmt.executeQuery(sql);
-                    sql = "UPDATE revenue SET drink = '" + drink+dprice + "' WHERE date = '" + currentDate + "'";
+            }
+            //if drink is purchased
+            if(dr){
+                sql = "UPDATE revenue SET total = '" + decForm.format(total+dprice) + "' WHERE date = '" + currentDate + "'";
+                stmt.executeUpdate(sql);
+
+                sql = "SELECT drink FROM revenue WHERE date = '" + currentDate + "'";
+                ResultSet drinkResult = stmt.executeQuery(sql);
+                if(drinkResult.next()) {
+                    double drink = drinkResult.getDouble(1);
+                    sql = "UPDATE revenue SET drink = '" + decForm.format(drink + dprice) + "' WHERE date = '" + currentDate + "'";
                     stmt.executeUpdate(sql);
                 }
-                //if candy is purchased
-                if(can){
-                    sql = "UPDATE revenue SET total = '" + total+cprice + "' WHERE date = '" + currentDate + "'";
-                    stmt.executeUpdate(sql);
+            }
+            //if candy is purchased
+            if(can){
+                sql = "UPDATE revenue SET total = '" + decForm.format(total+cprice) + "' WHERE date = '" + currentDate + "'";
+                stmt.executeUpdate(sql);
 
-                    sql = "SELECT candy FROM revenue WHERE date = '" + currentDate + "'";
-                    ResultSet candy = stmt.executeQuery(sql);
-                    sql = "UPDATE revenue SET candy = '" + candy+cprice + "' WHERE date = '" + currentDate + "'";
+                sql = "SELECT candy FROM revenue WHERE date = '" + currentDate + "'";
+                ResultSet candyResult = stmt.executeQuery(sql);
+                if(candyResult.next()) {
+                    double candy = candyResult.getDouble(1);
+                    sql = "UPDATE revenue SET candy = '" + decForm.format(candy + cprice) + "' WHERE date = '" + currentDate + "'";
                     stmt.executeUpdate(sql);
                 }
             }
