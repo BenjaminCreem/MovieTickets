@@ -3,18 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="2b50a484-d7ee-4a04-a859-f6163d1f9933" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MovieTickets/AccountManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MovieTickets/AccountManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MovieTickets/Customer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MovieTickets/Customer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MovieTickets/Employee.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MovieTickets/Employee.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MovieTickets/GUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MovieTickets/GUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MovieTickets/PaymentManager.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MovieTickets/SceneSetter$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MovieTickets/SceneSetter$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MovieTickets/SceneSetter$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MovieTickets/SceneSetter$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MovieTickets/SceneSetter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MovieTickets/SceneSetter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MovieTickets/Showing.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MovieTickets/Showing.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MovieTickets/TheaterManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MovieTickets/TheaterManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MovieTickets/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MovieTickets/User.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MovieTickets/UtilityMethods.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MovieTickets/UtilityMethods.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SceneSetter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SceneSetter.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -28,13 +16,13 @@
     <session id="584019128">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="15" />
+          <entry key="project.closed" value="16" />
           <entry key="project.open.time.0" value="1" />
-          <entry key="project.open.time.4" value="4" />
+          <entry key="project.open.time.4" value="5" />
           <entry key="project.open.time.5" value="7" />
           <entry key="project.open.time.6" value="3" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="16" />
+          <entry key="project.opened" value="17" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -51,15 +39,15 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="17262" />
+          <entry key="java" value="17590" />
           <entry key="sql" value="128" />
-          <entry key="txt" value="49" />
+          <entry key="txt" value="104" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="17262" />
-          <entry key="PLAIN_TEXT" value="49" />
+          <entry key="JAVA" value="17590" />
+          <entry key="PLAIN_TEXT" value="104" />
           <entry key="SQL" value="128" />
         </counts>
       </usages-collector>
@@ -70,8 +58,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/SceneSetter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="128">
-              <caret line="301" column="45" lean-forward="true" selection-start-line="301" selection-start-column="45" selection-end-line="301" selection-end-column="45" />
+            <state relative-caret-position="621">
+              <caret line="648" column="72" lean-forward="true" selection-start-line="648" selection-start-column="72" selection-end-line="648" selection-end-column="72" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -82,8 +70,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/PaymentManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="223">
-              <caret line="103" column="17" lean-forward="true" selection-start-line="103" selection-start-column="17" selection-end-line="103" selection-end-column="17" />
+            <state relative-caret-position="1683">
+              <caret line="103" column="17" selection-start-line="103" selection-start-column="17" selection-end-line="103" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -94,7 +82,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AccountManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="400">
+            <state relative-caret-position="1020">
               <caret line="60" column="39" selection-start-line="60" selection-start-column="19" selection-end-line="60" selection-end-column="40" />
             </state>
           </provider>
@@ -115,7 +103,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/TheaterManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="128">
+            <state relative-caret-position="408">
               <caret line="30" column="20" selection-start-line="30" selection-start-column="20" selection-end-line="30" selection-end-column="20" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -171,7 +159,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -203,13 +190,14 @@
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="Downloaded.Files.Path.Enabled" value="false" />
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1555300217486" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1555301555341" />
     <property name="last_opened_file_path" value="C:/Program Files/Java/javafx-sdk-11.0.2/lib" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
@@ -255,7 +243,14 @@
       <option name="project" value="LOCAL" />
       <updated>1555299961136</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Added snack purchase scene button and base scene">
+      <created>1555300260944</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1555300260944</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TodoView">
@@ -271,7 +266,7 @@
     <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15938166" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1609808" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -280,7 +275,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.329718" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.3308026" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3308026" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -304,7 +299,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Fixed PaymentManger updateRevenue method." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed PaymentManger updateRevenue method." />
+    <MESSAGE value="Added snack purchase scene button and base scene" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added snack purchase scene button and base scene" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/Auditorium.java" />
@@ -340,9 +336,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="58">
           <caret line="15" column="21" selection-start-line="15" selection-start-column="21" selection-end-line="15" selection-end-column="21" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -360,6 +353,33 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/SceneSetter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="621">
+          <caret line="648" column="72" lean-forward="true" selection-start-line="648" selection-start-column="72" selection-end-line="648" selection-end-column="72" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/PaymentManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1683">
+          <caret line="103" column="17" selection-start-line="103" selection-start-column="17" selection-end-line="103" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AccountManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1020">
+          <caret line="60" column="39" selection-start-line="60" selection-start-column="19" selection-end-line="60" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/GUI.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
@@ -372,35 +392,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/TheaterManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
+        <state relative-caret-position="408">
           <caret line="30" column="20" selection-start-line="30" selection-start-column="20" selection-end-line="30" selection-end-column="20" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AccountManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="60" column="39" selection-start-line="60" selection-start-column="19" selection-end-line="60" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/PaymentManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="223">
-          <caret line="103" column="17" lean-forward="true" selection-start-line="103" selection-start-column="17" selection-end-line="103" selection-end-column="17" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/SceneSetter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="301" column="45" lean-forward="true" selection-start-line="301" selection-start-column="45" selection-end-line="301" selection-end-column="45" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

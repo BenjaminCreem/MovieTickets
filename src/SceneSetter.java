@@ -592,13 +592,32 @@ public class SceneSetter {
         Button back = new Button("Previous Screen");
         back.setOnAction(e -> window.setScene(getTheaterScene()));
         pay.setOnAction(e -> paymentClicked(nameInput, cardNumberInput, dp, secCodeInput, zipCodeInput, emailInput, thisMovie, seatRectanges));
-        bottomButtons.getChildren().addAll(pay, back);
+        bottomButtons.getChildren().addAll(pay);
+
+        //If user is employee they can pay in cash
+        if(loggedInUser instanceof Employee){
+            Button cashButton = new Button("Payed in Cash");
+            cashButton.setOnAction(e -> paymentClickedCash(seatRectanges, thisMovie));
+            bottomButtons.getChildren().add(cashButton);
+        }
+        bottomButtons.getChildren().add(back);
+
         bottomButtons.setAlignment(Pos.CENTER);
         bottomButtons.setSpacing(10.0);
         mainLayout.getChildren().add(bottomButtons);
 
+
+
         Scene scene = new Scene(mainLayout, 1280, 720);
         return scene;
+    }
+    private void paymentClickedCash(Rectangle seats[], Showing showing){
+        PaymentManager pm = new PaymentManager();
+        for(int i = 0; i < seats.length; i++){
+            pm.updateRevenue(true, false, false, false);
+            showing.reserveSeat(i);
+        }
+        window.setScene(paymentSuccessful());
     }
 
     //TO DO - finish this so that payment manager does some stuff too
@@ -633,8 +652,8 @@ public class SceneSetter {
             email.setBorder(errorBorder);
         }
         if(successful){
-            pm.updateRevenue(true,false,false,false);
             for(int i = 0; i < seats.length; i++){
+                pm.updateRevenue(true,false,false,false);
                 if(seats[i].getFill().equals(Color.GREEN)){
                     showing.reserveSeat(i);
                 }
