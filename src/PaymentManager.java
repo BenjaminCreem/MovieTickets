@@ -20,7 +20,7 @@ public class PaymentManager {
         String myDatabase = "MovieTickets";
         String url = "jdbc:mysql://" + serverName + "/" + myDatabase;
         String username = "root";
-        String password = "KFZ73bx844FB10xH";
+        String password = "shockfire3DG";
         try {
             Class.forName(driverName);
             databaseConn = DriverManager.getConnection(url, username, password);
