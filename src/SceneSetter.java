@@ -314,13 +314,118 @@ public class SceneSetter {
                 addEmployeeButton.setOnAction(e -> window.setScene(addEmployeeScene()));
                 Button revenueButton = new Button("View Revenue Data");
                 revenueButton.setOnAction(e -> window.setScene(revenueScene()));
-                bottomNavBar.getChildren().addAll(addEmployeeButton, revenueButton);
+                Button movieManagerButton = new Button("Movie Manager");
+                movieManagerButton.setOnAction(e -> window.setScene(movieManager()));
+                bottomNavBar.getChildren().addAll(addEmployeeButton, revenueButton, movieManagerButton);
             }
         }
 
 
         Scene scene = new Scene(mainLayout, 1280, 720);
         return scene;
+    }
+
+    public Scene movieManager(){
+        VBox mainLayout = new VBox();
+        mainLayout.setAlignment(Pos.CENTER);
+        mainLayout.setSpacing(10.0);
+        HBox moviesVsAddMovieTitles = new HBox();
+        moviesVsAddMovieTitles.setSpacing(300.0);
+        moviesVsAddMovieTitles.setAlignment(Pos.CENTER);
+
+
+        Label addMovie = new Label("Add Movie");
+        moviesVsAddMovieTitles.getChildren().add(addMovie);
+        Label removeMovies = new Label("Remove Movies");
+        moviesVsAddMovieTitles.getChildren().add(removeMovies);
+        mainLayout.getChildren().add(moviesVsAddMovieTitles);
+
+        HBox actualForms = new HBox();
+        actualForms.setSpacing(100.0);
+        actualForms.setAlignment(Pos.CENTER);
+
+        GridPane addMovieGrid = new GridPane();
+        addMovieGrid.setAlignment(Pos.CENTER);
+        addMovieGrid.setHgap(10.0);
+        addMovieGrid.setVgap(10.0);
+
+        //Movie name
+        Label movieNameLabel = new Label("Movie Name: ");
+        GridPane.setConstraints(movieNameLabel, 0, 0);
+        TextField movieName = new TextField();
+        movieName.setPromptText("movie name");
+        GridPane.setConstraints(movieName, 1, 0);
+
+        //Theater Number
+        Label theaterNumber = new Label("Theater Number");
+        GridPane.setConstraints(theaterNumber, 0, 1);
+        ObservableList<Integer> theaterNumbers = FXCollections.observableArrayList(
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+        );
+        final ComboBox theaterNumberDropDown = new ComboBox(theaterNumbers);
+        theaterNumberDropDown.getSelectionModel().selectFirst();
+        theaterNumberDropDown.setPrefWidth(175.0);
+        GridPane.setConstraints(theaterNumberDropDown, 1, 1);
+
+        //Time
+        Label timeLabel = new Label("Time: ");
+        GridPane.setConstraints(timeLabel, 0, 2);
+        TextField time = new TextField();
+        time.setPromptText("24hr time (1230)");
+        GridPane.setConstraints(time, 1, 2);
+
+        //Button to add movie
+        Button addMovieBtn = new Button("Add Movie");
+        GridPane.setConstraints(addMovieBtn, 0, 3);
+        addMovieBtn.setOnAction(e -> addMovieBtnClicked(movieName.getText(), (int)theaterNumberDropDown.getValue(), time.getText()));
+
+        addMovieGrid.getChildren().addAll(movieNameLabel, movieName, theaterNumber, theaterNumberDropDown, timeLabel, time, addMovieBtn);
+
+        //Remove showing grid
+        GridPane removeShowingGrid = new GridPane();
+        removeMovies.setAlignment(Pos.CENTER);
+        removeShowingGrid.setVgap(10.0);
+        removeShowingGrid.setHgap(10.0);
+        ArrayList<String> movies = tm.getMovieNames();
+        for(int i = 0; i < movies.size(); i++){
+            Label movieNameLabelRemove = new Label(movies.get(i));
+            GridPane.setConstraints(movieNameLabelRemove, 0, i);
+            removeShowingGrid.getChildren().add(movieNameLabelRemove);
+
+            ArrayList<Showing> showings = tm.getShowings(movies.get(i));
+            for(int j = 0; j < showings.size(); j++){
+                final int movieID = j;
+
+                UtilityMethods um = new UtilityMethods();
+                Hyperlink theaterLink = new Hyperlink(um.formatTime(showings.get(movieID).showtime));
+                theaterLink.setOnAction(e -> movieRemovedClicked(showings.get(movieID).id));
+
+                GridPane.setConstraints(theaterLink, j+1, i);
+                removeShowingGrid.getChildren().add(theaterLink);
+            }
+        }
+
+        actualForms.getChildren().addAll(addMovieGrid, removeShowingGrid);
+        mainLayout.getChildren().add(actualForms);
+
+        Button back = new Button("Back");
+        back.setOnAction(e -> window.setScene(getTheaterScene()));
+        mainLayout.getChildren().add(back);
+
+
+        Scene scene = new Scene(mainLayout, 1280, 720);
+        return scene;
+    }
+
+    private void movieRemovedClicked(int id){
+        tm.removeMovie(id);
+        window.setScene(movieManager());
+    }
+
+    private void addMovieBtnClicked(String movieName, int theaterNumber, String time){
+        if(tm.insertIntoMovies(movieName, theaterNumber, time)){
+            window.setScene(movieManager());
+        }
     }
 
     public Scene snackPurchaseScene(){
@@ -548,7 +653,7 @@ public class SceneSetter {
 
         UtilityMethods um = new UtilityMethods();
         mainLayout.setAlignment(Pos.CENTER);
-        Showing thisMovie = new Showing(movieId);
+        Showing thisMovie = new Showing(movieId, tm);
 
         //Header
         Label movieName = new Label(thisMovie.movieName);

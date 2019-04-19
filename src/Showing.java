@@ -10,20 +10,21 @@ public class Showing {
     String seats;
     int theaterNumber;
     Connection db;
+    TheaterManager tm;
 
-    public Showing(int myid, String name, String show, String s, int n){
+    public Showing(int myid, String name, String show, String s, int n, TheaterManager thetManag){
         id = myid;
         movieName = name;
         showtime = show;
         seats = s;
         theaterNumber = n;
-        TheaterManager tm = new TheaterManager();
+        tm = thetManag;
         db = tm.getDbConn();
     }
 
-    public Showing(int myid){
+    public Showing(int myid, TheaterManager thetManag){
         id = myid;
-        TheaterManager tm = new TheaterManager();
+        tm = thetManag;
         db = tm.getDbConn();
         try {
             Statement stmt = db.createStatement();

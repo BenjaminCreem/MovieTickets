@@ -24,6 +24,28 @@ public class TheaterManager {
         }
     }
 
+    public void removeMovie(int id){
+        try {
+            Statement stmt = databaseConn.createStatement();
+            stmt.executeUpdate("DELETE FROM showings WHERE id = " + id);
+        }catch(Exception ignored){
+
+        }
+    }
+
+    public boolean insertIntoMovies(String movieName, int theaterNumber, String showTime){
+        if(showTime.length() == 4){
+            try{
+                Integer.parseInt(showTime);
+                Statement stmt = databaseConn.createStatement();
+                stmt.executeUpdate("INSERT INTO showings (movieName, showTime, theaterNumber) VALUES ('" + movieName + "', '" + showTime + "', '" + theaterNumber + "');");
+            }catch(Exception e){
+                return false;
+            }
+        }
+        return true; //Only got here if we didnt return false
+    }
+
     public Connection getDbConn(){
         return databaseConn;
     }
@@ -35,7 +57,7 @@ public class TheaterManager {
             Statement stmt = databaseConn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM showings WHERE movieName = '" + movieName + "'");
             while(rs.next()) {
-                s = new Showing(rs.getInt(1));
+                s = new Showing(rs.getInt(1), this);
                 showings.add(s);
             }
         }
