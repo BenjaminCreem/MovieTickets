@@ -30,6 +30,10 @@ public class SceneSetter {
     private User loggedInUser;
     private String customerOrEmployee;
 
+    AccountManager am;
+    TheaterManager tm;
+    PaymentManager pm;
+
 
     //Used for screen where user inputs their seats
     private int numberSeatsSelected;
@@ -37,6 +41,9 @@ public class SceneSetter {
     public SceneSetter(Stage w){
         window = w;
         numberSeatsSelected = 0;
+        am = new AccountManager();
+        tm = new TheaterManager();
+        pm = new PaymentManager();
     }
 
     public Scene firstScene(){
@@ -218,7 +225,6 @@ public class SceneSetter {
     }
 
     private void loginClickedCustomer(TextField email, TextField password){
-        AccountManager am = new AccountManager();
         if(am.customerSignin(email.getText(), password.getText())){ //Correct username and password
             //Go to movie selection screen
             loggedInUser = am.getPaymentInfo(email.getText());
@@ -227,7 +233,6 @@ public class SceneSetter {
     }
 
     private void loginClickedEmployee(TextField email, TextField password){
-        AccountManager am = new AccountManager();
         if(am.employeeSignin(email.getText(), password.getText())){ //Correct username and password
             //Go to movie selection screen
             loggedInUser = am.getEmployee(email.getText());
@@ -239,7 +244,6 @@ public class SceneSetter {
     private void signupClicked(TextField name, TextField email, PasswordField pass, PasswordField confPass, TextField creditNum,
                                DatePicker dp, TextField secCode, TextField zipCode)
     {
-        AccountManager am = new AccountManager();
         //Convert LocalDate object from dp to Date object because createCustomerAccount inside of AccountManager needs a Date object
         LocalDate ld = dp.getValue();
         java.sql.Date sqlDate = java.sql.Date.valueOf(ld.toString());
@@ -267,7 +271,6 @@ public class SceneSetter {
         grid.setHgap(10); //Set horizontal spacing
         grid.setAlignment(Pos.CENTER);
 
-        TheaterManager tm = new TheaterManager();
         ArrayList<String> movies = tm.getMovieNames();
         for(int i = 0; i < movies.size(); i++){
             Label movieNameLabel = new Label(movies.get(i));
@@ -454,7 +457,6 @@ public class SceneSetter {
         mainLayout.setSpacing(10.0);
         mainLayout.setAlignment(Pos.CENTER);
         Scene scene = new Scene(mainLayout, 1280, 720);
-        PaymentManager pm = new PaymentManager();
         Label titleOfPage = new Label("Revenue");
         mainLayout.getChildren().addAll(titleOfPage);
 
@@ -534,7 +536,6 @@ public class SceneSetter {
     }
 
     public void addEmpButtonClicked(TextField email, TextField pass, TextField confPass, CheckBox manager){
-        AccountManager am = new AccountManager();
         if(email.getText() != null && !email.getText().trim().isEmpty() && pass.getText() != null && !pass.getText().trim().isEmpty() && confPass.getText() != null && !confPass.getText().trim().isEmpty()) {
             if (am.createEmployeeAccount(email.getText(), pass.getText(), confPass.getText(), manager.isSelected())) {
                 window.setScene(getTheaterScene());
@@ -751,7 +752,6 @@ public class SceneSetter {
     }
 
     private void paymentClickedCash(Rectangle seats[], Showing showing){
-        PaymentManager pm = new PaymentManager();
         for(int i = 0; i < seats.length; i++){
             pm.updateRevenue(true, false, false, false);
             showing.reserveSeat(i);
@@ -762,7 +762,6 @@ public class SceneSetter {
     public void paymentClicked(TextField name, TextField num, DatePicker date, TextField secCode, TextField zip, TextField email, Showing showing, Rectangle seats[]){
         //Make sure all fields are filed
         boolean successful = true;
-        PaymentManager pm = new PaymentManager();
 
         Border errorBorder = new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
         if(name.getText() == null || name.getText().trim().isEmpty()){
@@ -817,7 +816,6 @@ public class SceneSetter {
     public void snackPaymentClicked(TextField name, TextField num, DatePicker date, TextField secCode, TextField zip, String pop, String dr, String can){
         //Make sure all fields are filed
         boolean successful = true;
-        PaymentManager pm = new PaymentManager();
 
         Border errorBorder = new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
         if(name.getText() == null || name.getText().trim().isEmpty()){
@@ -860,7 +858,6 @@ public class SceneSetter {
     }
 
     private void snackPaymentClickedCash(String pop, String dr, String can){
-        PaymentManager pm = new PaymentManager();
         int p = Integer.parseInt(pop);
         int d = Integer.parseInt(dr);
         int c = Integer.parseInt(can);
